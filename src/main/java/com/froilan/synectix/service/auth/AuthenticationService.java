@@ -3,6 +3,7 @@ package com.froilan.synectix.service.auth;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.froilan.synectix.exception.authentication.UserNotFoundException;
 import com.froilan.synectix.exception.authentication.WrongPasswordException;
 import com.froilan.synectix.repository.user.UserRepository;
 
@@ -28,8 +29,7 @@ public class AuthenticationService {
                     }
                 },
                 () -> {
-                    System.out.println(username);
-                    throw new WrongPasswordException("User with that email or username does not exist.");
+                    throw new UserNotFoundException("User with that email or username does not exist.");
                 });
     }
 }
