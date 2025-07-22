@@ -20,9 +20,6 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import com.froilan.synectix.model.enums.Country;
-import com.froilan.synectix.model.enums.OrganizationType;
-
 /**
  * Represents a user in the PostgreSQL database.
  * This class is used to store user information such as username, first name,
@@ -94,25 +91,6 @@ public class User {
     @Size(max = 15, message = "Phone number cannot exceed 15 characters")
     @Pattern(regexp = "^\\+?[0-9]{1,15}$", message = "Phone number must be valid")
     private String phoneNumber;
-
-    /**
-     * The country of the user.
-     * This variable is used to display the user's country in the application.
-     */
-    @Column(nullable = false, unique = true, name = "country", length = 10, columnDefinition = "VARCHAR(5)")
-    @NotBlank(message = "Country cannot be blank")
-    @Size(max = 5, message = "Country cannot exceed 5 characters")
-    private Country country;
-
-    /**
-     * The organization type of the user.
-     * This variable is used to display the user's organization type in the
-     * application.
-     */
-    @Column(nullable = false, name = "organization_type", length = 20, columnDefinition = "VARCHAR(20)")
-    @NotBlank(message = "Organization type cannot be blank")
-    @Size(max = 20, message = "Organization type cannot exceed 20 characters")
-    private OrganizationType organizationType;
 
     /**
      * The password of the user.
@@ -231,8 +209,6 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", country=" + country +
-                ", organizationType=" + organizationType +
                 ", hashedPassword='" + hashedPassword + '\'' +
                 '}';
     }
