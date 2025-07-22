@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.froilan.synectix.service.auth.AuthenticationService;
 import com.froilan.synectix.util.RequestLogger;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -21,9 +21,9 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public String signIn(@RequestParam String username, @RequestParam String password) {
-        logger.info("Sign in request for user: {}", username);
-        this.authenticationService.SignInUser(username, password);
+    public String signIn(@RequestBody String email, @RequestBody String password) {
+        logger.info("Sign in request for user: {}", email);
+        this.authenticationService.SignInUser(email, password);
         return "Sign in successful";
     }
 
