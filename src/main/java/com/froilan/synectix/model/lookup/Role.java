@@ -1,4 +1,4 @@
-package com.froilan.synectix.model;
+package com.froilan.synectix.model.lookup;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

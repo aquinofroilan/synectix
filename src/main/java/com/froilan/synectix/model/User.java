@@ -3,7 +3,6 @@ package com.froilan.synectix.model;
 import java.time.LocalDateTime;
 
 import org.checkerframework.common.value.qual.BoolVal;
-import org.hibernate.validator.constraints.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,8 +40,9 @@ public class User {
      * The UUID of the user.
      * This variable is used to display the user's UUID in the application.
      */
-    @UUID
-    @Column(nullable = false, unique = true, name = "uuid", length = 36, columnDefinition = "VARCHAR(36)")
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @Column(updatable = false, nullable = false)
     private String uuid;
 
     /**
@@ -125,7 +125,6 @@ public class User {
      * application.
      */
     @Column(nullable = false, unique = true, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotBlank(message = "Created at cannot be blank")
     @Size(max = 50, message = "Created at cannot exceed 50 characters")
     @PastOrPresent(message = "Created at must be in the past or present")
@@ -139,7 +138,6 @@ public class User {
      * application.
      */
     @Column(nullable = false, unique = true, name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private LocalDateTime updatedAt;
 
     // Getters and Setters

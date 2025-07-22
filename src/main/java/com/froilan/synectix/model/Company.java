@@ -2,13 +2,15 @@ package com.froilan.synectix.model;
 
 import org.hibernate.validator.constraints.UUID;
 
-import com.froilan.synectix.model.enums.Country;
-import com.froilan.synectix.model.enums.OrganizationType;
+import com.froilan.synectix.model.lookup.Country;
+import com.froilan.synectix.model.lookup.OrganizationType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -62,9 +64,8 @@ public class Company {
      * The country of the company.
      * This variable is used to display the company's country in the application.
      */
-    @Column(nullable = false, unique = true, name = "country", length = 10, columnDefinition = "VARCHAR(5)")
-    @NotBlank(message = "Country cannot be blank")
-    @Size(max = 5, message = "Country cannot exceed 5 characters")
+    @ManyToOne
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
     /**
@@ -72,8 +73,7 @@ public class Company {
      * This variable is used to display the company's organization type in the
      * application.
      */
-    @Column(nullable = false, name = "organization_type", length = 20, columnDefinition = "VARCHAR(20)")
-    @NotBlank(message = "Organization type cannot be blank")
-    @Size(max = 20, message = "Organization type cannot exceed 20 characters")
+    @ManyToOne
+    @JoinColumn(name = "organization_type_id", nullable = false)
     private OrganizationType organizationType;
 }
