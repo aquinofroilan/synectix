@@ -1,10 +1,15 @@
 package com.froilan.synectix.model.lookup;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
+@Entity
+@Table(name = "country", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
 public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

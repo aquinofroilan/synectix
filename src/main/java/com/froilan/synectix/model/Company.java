@@ -1,36 +1,34 @@
 package com.froilan.synectix.model;
 
-import org.hibernate.validator.constraints.UUID;
+import java.util.UUID;
 
 import com.froilan.synectix.model.lookup.Country;
 import com.froilan.synectix.model.lookup.OrganizationType;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@Entity()
+@Table(name = "companies", uniqueConstraints = @UniqueConstraint(columnNames = { "uuid", "registration_number",
+        "tax_number" }))
 public class Company {
-
-    /**
-     * The unique identifier for the company.
-     * This variable is used to display the company's ID in the application.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
     /**
      * The UUID of the company.
      * This variable is used to display the company's UUID in the application.
      */
-    @UUID
-    @Column(nullable = false, unique = true, name = "uuid", length = 36, columnDefinition = "VARCHAR(36)")
-    private String uuid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID uuid;
 
     /**
      * The name of the company.
