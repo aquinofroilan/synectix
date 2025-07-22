@@ -1,5 +1,8 @@
 package com.froilan.synectix.model;
 
+import java.time.LocalDateTime;
+
+import org.checkerframework.common.value.qual.BoolVal;
 import org.hibernate.validator.constraints.UUID;
 
 import jakarta.persistence.Column;
@@ -10,7 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-import com.froilan.synectix.model.enums.Role;
+import com.froilan.synectix.model.enums.Country;
+import com.froilan.synectix.model.enums.OrganizationType;
 
 /**
  * Represents a user in the PostgreSQL database.
@@ -18,7 +22,8 @@ import com.froilan.synectix.model.enums.Role;
  * last name, email, role, and password.
  */
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "username", "email", "uuid" }))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "username", "email", "uuid",
+        "phone_number" }))
 public class User {
     /**
      * The unique identifier for the user.
@@ -64,11 +69,26 @@ public class User {
     private String email;
 
     /**
-     * The role of the user.
-     * This variable is used to display the user's role in the application.
+     * The phone number of the user.
+     * This variable is used to display the user's phone number in the application.
      */
-    @Column(nullable = false, name = "role", length = 20, columnDefinition = "VARCHAR(20)")
-    private Role role;
+    @Column(nullable = false, unique = true, name = "phone_number", length = 15, columnDefinition = "VARCHAR(15)")
+    private String phoneNumber;
+
+    /**
+     * The country of the user.
+     * This variable is used to display the user's country in the application.
+     */
+    @Column(nullable = false, unique = true, name = "country", length = 10, columnDefinition = "VARCHAR(5)")
+    private Country country;
+
+    /**
+     * The organization type of the user.
+     * This variable is used to display the user's organization type in the
+     * application.
+     */
+    @Column(nullable = false, name = "organization_type", length = 20, columnDefinition = "VARCHAR(20)")
+    private OrganizationType organizationType;
 
     /**
      * The password of the user.
@@ -76,6 +96,25 @@ public class User {
      */
     @Column(nullable = false, unique = true, name = "password", length = 255, columnDefinition = "VARCHAR(255)")
     private String password;
+
+    @BoolVal(value = false)
+    private boolean isDeleted = false;
+
+    /**
+     * The timestamp when the user was created.
+     * This variable is used to display the user's creation time in the
+     * application.
+     */
+    @Column(nullable = false, unique = true, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdAt;
+
+    /**
+     * The timestamp when the user was last updated.
+     * This variable is used to display the user's last update time in the
+     * application.
+     */
+    @Column(nullable = false, unique = true, name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime updatedAt;
 
     // Getters and Setters
     public Integer getId() {
@@ -126,14 +165,6 @@ public class User {
         this.email = email;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -151,7 +182,9 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", role=" + role +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", country=" + country +
+                ", organizationType=" + organizationType +
                 ", password='" + password + '\'' +
                 '}';
     }
