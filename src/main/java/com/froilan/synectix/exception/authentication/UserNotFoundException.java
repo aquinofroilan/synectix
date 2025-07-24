@@ -1,7 +1,9 @@
 package com.froilan.synectix.exception.authentication;
 
 import com.froilan.synectix.exception.ErrorCode;
+import lombok.Getter;
 
+@Getter
 public class UserNotFoundException extends RuntimeException {
     private final String errorCode;
 
@@ -10,7 +12,4 @@ public class UserNotFoundException extends RuntimeException {
         this.errorCode = ErrorCode.USER_NOT_FOUND;
     }
 
-    public String getErrorCode() {
-        return errorCode;
-    }
 }

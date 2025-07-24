@@ -17,9 +17,7 @@ public class AuthenticationService {
         this.userRepository = userRepository;
     }
 
-    public void SignInUser(String username, String password) {
-        // Logic to sign in user
-        // This is a placeholder for actual authentication logic
+    public void SignInUser(String username, String password)   {
         userRepository.findByEmail(username).ifPresentOrElse(
                 user -> {
                     if (passwordEncoder.matches(password, user.getHashedPassword())) {

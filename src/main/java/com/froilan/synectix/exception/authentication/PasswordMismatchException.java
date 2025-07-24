@@ -4,12 +4,12 @@ import com.froilan.synectix.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class UsernameTakenException extends RuntimeException {
+public class PasswordMismatchException extends RuntimeException {
     private final String errorCode;
 
-    public UsernameTakenException(String message) {
+    public PasswordMismatchException(String message) {
         super(message);
-        this.errorCode = ErrorCode.USERNAME_TAKEN;
+        this.errorCode = ErrorCode.PASSWORD_MISMATCH;
     }
 
 }
