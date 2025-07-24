@@ -127,6 +127,11 @@ public class User {
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean isActive = true;
 
+    @Setter
+    @Getter
+    @Column(nullable = false, name = "last_login", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime lastLogin;
+
     /**
      * The timestamp when the user was created.
      * This variable is used to display the user's creation time in the
