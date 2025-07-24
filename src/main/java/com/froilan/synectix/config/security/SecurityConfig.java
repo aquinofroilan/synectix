@@ -26,7 +26,10 @@ public class SecurityConfig {
                 .rememberMe(AbstractHttpConfigurer::disable).httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(withDefaults()));
+                        oauth2 -> oauth2.jwt(withDefaults()))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/lookup/**").permitAll()
+                        .anyRequest().authenticated());
         return http.getOrBuild();
     }
 
