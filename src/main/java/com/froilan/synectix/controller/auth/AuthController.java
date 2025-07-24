@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
+import com.froilan.synectix.model.dto.request.authentication.SignInRequest;
 import com.froilan.synectix.service.auth.AuthenticationService;
 import com.froilan.synectix.util.RequestLogger;
 
@@ -27,14 +28,14 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public String signIn(@RequestBody String email, @RequestBody String password) {
-        logger.info("Sign in request for user: {}", email);
-        this.authenticationService.SignInUser(email, password);
-        return "Sign in successful";
+    public ResponseEntity<String> signIn(@Valid @RequestBody SignInRequest request) {
+        logger.info("Sign in request for user: {}", request.getUser());
+        this.authenticationService.SignInUser(request.getUser(), request.getPassword());
+        return ResponseEntity.ok("Sign up successful");
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(
+    public ResponseEntity<String> signUp(
             @Valid @RequestBody NewClientSignUpRequest request) {
         logger.info("Sign up request for user: {}", request.getEmail());
         if (!request.getPassword().equals(request.getConfirmPassword())) {
