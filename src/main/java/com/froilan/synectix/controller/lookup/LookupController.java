@@ -1,6 +1,7 @@
 package com.froilan.synectix.controller.lookup;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.froilan.synectix.model.lookup.Country;
+import com.froilan.synectix.model.lookup.OrganizationType;
+import com.froilan.synectix.service.lookup.LookupService;
 import com.froilan.synectix.util.RequestLogger;
 import com.froilan.synectix.util.security.GetClientIP;
 
@@ -15,26 +19,32 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/lookup")
 public class LookupController {
     private static final Logger logger = LoggerFactory.getLogger(RequestLogger.class);
+    private final LookupService lookupService;
+
+    public LookupController(LookupService lookupService) {
+        this.lookupService = lookupService;
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/countries")
-    public String getMethodName(HttpServletRequest request) {
+    public List<Country> getMethodName(HttpServletRequest request) {
         logger.info(LocalDateTime.now().toString(),
-                " - Sign in request for user: {}" + GetClientIP.extractClientIp(request));
-        return new String();
+                " - Lookup request from IP: {}" + GetClientIP.extractClientIp(request));
+        return ResponseEntity.ok(lookupService.getAllCountries()).getBody();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/organization-types")
-    public String getOrganizationTypes(HttpServletRequest request) {
+    public List<OrganizationType> getOrganizationTypes(HttpServletRequest request) {
         logger.info(LocalDateTime.now().toString(),
-                " - Sign in request for user: {}" + GetClientIP.extractClientIp(request));
-        return new String();
+                " - Lookup request from IP: {}" + GetClientIP.extractClientIp(request));
+        return ResponseEntity.ok(lookupService.getAllOrganizationTypes()).getBody();
     }
 
 }
