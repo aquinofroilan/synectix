@@ -80,7 +80,7 @@ public class Company {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "country_id", nullable = false, table = "country", updatable = false)
+    @JoinColumn(name = "country_id", nullable = false, updatable = false)
     private Country country;
 
     /**
