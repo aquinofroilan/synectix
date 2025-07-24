@@ -3,8 +3,6 @@ package com.froilan.synectix.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.checkerframework.common.value.qual.BoolVal;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +34,7 @@ public class User {
      * This variable is used to display the user's UUID in the application.
      */
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID uuid;
@@ -103,7 +102,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "hashed_password", length = 255, columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, unique = true, name = "hashed_password", columnDefinition = "VARCHAR(255)")
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters")
     private String hashedPassword;
@@ -115,7 +114,6 @@ public class User {
      */
     @Getter
     @Setter
-    @BoolVal(value = false)
     @Column(nullable = false, name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted = false;
 
@@ -126,7 +124,6 @@ public class User {
      */
     @Setter
     @Getter
-    @BoolVal(value = true)
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean isActive = true;
 
