@@ -24,14 +24,10 @@ public class SecurityConfig {
                 AbstractHttpConfigurer::disable).logout(
                         AbstractHttpConfigurer::disable)
                 .rememberMe(AbstractHttpConfigurer::disable).httpBasic(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/signin").permitAll()
-                        .anyRequest().authenticated())
-                .httpBasic(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(
                         oauth2 -> oauth2.jwt(withDefaults()));
-        return http.build();
+        return http.getOrBuild();
     }
 
     @Bean

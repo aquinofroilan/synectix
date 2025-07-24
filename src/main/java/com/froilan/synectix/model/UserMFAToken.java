@@ -12,8 +12,7 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 
 @Entity
-@Table(name = "user_mfa_tokens", uniqueConstraints = @UniqueConstraint(columnNames = { "username", "email", "uuid",
-        "phone_number" }))
+@Table(name = "user_mfa_tokens", uniqueConstraints = @UniqueConstraint(columnNames = { "uuid" }))
 public class UserMFAToken {
     @Id
     @Getter
