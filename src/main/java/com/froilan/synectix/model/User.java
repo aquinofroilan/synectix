@@ -17,7 +17,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -28,6 +31,9 @@ import lombok.Setter;
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "username", "email", "uuid",
         "phone_number" }))
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     /**
      * The UUID of the user.
@@ -113,19 +119,17 @@ public class User {
      * application.
      */
     @Getter
-    @Setter
     @Column(nullable = false, name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean isDeleted = false;
+    private final boolean isDeleted = false;
 
     /**
      * Indicates whether the user is active.
      * This variable is used to display the user's active status in the
      * application.
      */
-    @Setter
     @Getter
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private boolean isActive = true;
+    private final boolean isActive = true;
 
     @Setter
     @Getter
