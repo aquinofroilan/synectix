@@ -14,7 +14,7 @@ import com.froilan.synectix.util.RequestLogger;
 @RestController
 @RequestMapping("/api")
 public class HealthController {
-private static final Logger logger = LoggerFactory.getLogger(RequestLogger.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestLogger.class);
 
     @GetMapping("/health")
     public Map<String, Object> health() {
