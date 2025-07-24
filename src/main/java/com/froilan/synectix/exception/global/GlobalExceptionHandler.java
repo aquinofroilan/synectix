@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.froilan.synectix.exception.ApiError;
 import com.froilan.synectix.exception.authentication.EmailTakenException;
 import com.froilan.synectix.exception.authentication.PasswordMismatchException;
@@ -48,6 +49,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handlePasswordMismatch(PasswordMismatchException ex) {
         ApiError error = new ApiError("PASSWORD_MISMATCH", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(JWTVerificationException.class)
+    public ResponseEntity<ApiError> handleJWTVerification(JWTVerificationException ex) {
+        ApiError error = new ApiError("JWT_VERIFICATION_ERROR", "Invalid JWT token.");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
