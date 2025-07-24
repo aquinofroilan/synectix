@@ -1,5 +1,8 @@
 package com.froilan.synectix.service.auth;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.type.descriptor.jdbc.LocalDateTimeJdbcType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +25,7 @@ public class AuthenticationService {
         userRepository.findByEmail(username).ifPresentOrElse(
                 user -> {
                     if (passwordEncoder.matches(password, user.getHashedPassword())) {
-                        System.out.println("User " + username + " signed in successfully.");
+                        user.setLastLogin(LocalDateTime.now());
                     } else {
                         throw new WrongPasswordException("The password you entered is incorrect.");
                     }
