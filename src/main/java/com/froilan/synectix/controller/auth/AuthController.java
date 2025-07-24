@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
 import com.froilan.synectix.service.auth.AuthenticationService;
 import com.froilan.synectix.util.RequestLogger;
@@ -35,6 +36,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<String> signup(
             @Valid @RequestBody NewClientSignUpRequest request) {
+        logger.info("Sign up request for user: {}", request.getEmail());
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new PasswordMismatchException("Passwords do not match");
+        }
         authenticationService.SignUpUser(request);
         return ResponseEntity.ok("Sign up successful");
     }
