@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 
+import com.froilan.synectix.config.security.jwt.JWTUtil;
 import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
 import com.froilan.synectix.model.dto.request.authentication.SignInRequest;
@@ -22,6 +23,7 @@ import com.froilan.synectix.util.RequestLogger;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,9 +32,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(RequestLogger.class);
     private final AuthenticationService authenticationService;
+    private final JWTUtil jwtUtil;
 
-    public AuthController(AuthenticationService authService) {
+    public AuthController(AuthenticationService authService, JWTUtil jwtUtil) {
         this.authenticationService = authService;
+        this.jwtUtil = jwtUtil;
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -50,6 +54,16 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .body(Map.of("access_token", tokens.get("accessToken")));
+    }
+
+    @PostMapping("/auth/refresh")
+    public ResponseEntity<?> refreshToken(@CookieValue("refresh_token") String refreshToken) {
+        if (!jwtUtil.isValid(refreshToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+        }
+        String newAccessToken = jwtUtil.refreshToken(jwtUtil.getUsernameFromToken(refreshToken),
+                jwtUtil.getUuidFromToken(refreshToken));
+        return ResponseEntity.ok(Map.of("access_token", newAccessToken));
     }
 
     @ResponseStatus(HttpStatus.CREATED)

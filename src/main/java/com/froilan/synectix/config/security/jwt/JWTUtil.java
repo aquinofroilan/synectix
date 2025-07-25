@@ -45,9 +45,28 @@ public class JWTUtil {
         return jwt.getClaim("username").asString();
     }
 
-    public String refreshToken(String username, String string) {
+    public String getUsernameFromToken(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        return jwt.getClaim("username").asString();
+    }
+
+    public String getUuidFromToken(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        return jwt.getSubject();
+    }
+
+    public boolean isValid(String token) {
+        try {
+            validateTokenAndRetrieveSubject(token);
+            return true;
+        } catch (JWTVerificationException e) {
+            return false;
+        }
+    }
+
+    public String refreshToken(String username, String uuidString) {
         return JWT.create()
-                .withSubject(string)
+                .withSubject(uuidString)
                 .withClaim("username", username)
                 .withIssuedAt(new Date())
                 .withIssuer("auth0")
