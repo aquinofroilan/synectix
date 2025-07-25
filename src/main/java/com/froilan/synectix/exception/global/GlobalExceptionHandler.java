@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.froilan.synectix.exception.ApiError;
-import com.froilan.synectix.exception.authentication.EmailTakenException;
+import com.froilan.synectix.exception.authentication.ConflictException;
 import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.exception.authentication.UserNotFoundException;
-import com.froilan.synectix.exception.authentication.UsernameTakenException;
 import com.froilan.synectix.exception.authentication.WrongPasswordException;
+import com.froilan.synectix.exception.validation.NotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -33,15 +33,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    @ExceptionHandler(EmailTakenException.class)
-    public ResponseEntity<ApiError> handleEmailTaken(EmailTakenException ex) {
-        ApiError error = new ApiError("EMAIL_TAKEN", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-    }
-
-    @ExceptionHandler(UsernameTakenException.class)
-    public ResponseEntity<ApiError> handleUsernameTaken(UsernameTakenException ex) {
-        ApiError error = new ApiError("USERNAME_TAKEN", ex.getMessage());
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ApiError> handleEmailTaken(ConflictException ex) {
+        ApiError error = new ApiError("CONFLICT_EXCEPTION", ex.getMessage() + ex.getField());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
@@ -55,6 +49,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleJWTVerification(JWTVerificationException ex) {
         ApiError error = new ApiError("JWT_VERIFICATION_ERROR", "Invalid JWT token.");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
+        ApiError error = new ApiError("NOT_FOUND", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

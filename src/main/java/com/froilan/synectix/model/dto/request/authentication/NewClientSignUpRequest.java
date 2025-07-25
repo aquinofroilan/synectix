@@ -23,6 +23,9 @@ public class NewClientSignUpRequest {
     private String email;
 
     @NotBlank
+    private String phoneNumber;
+
+    @NotBlank
     private String username;
 
     @NotBlank
@@ -37,9 +40,15 @@ public class NewClientSignUpRequest {
     private String companyName;
 
     @NotBlank
-    private String country;
+    private Integer countryId;
 
     @NotBlank
-    private String organizationType;
+    private Integer organizationTypeId;
+
+    @NotBlank
+    private String registrationNumber;
+
+    @NotBlank
+    private String taxNumber;
 
 }
