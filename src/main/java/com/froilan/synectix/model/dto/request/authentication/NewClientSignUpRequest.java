@@ -1,10 +1,10 @@
 package com.froilan.synectix.model.dto.request.authentication;
 
-import org.springframework.lang.NonNull;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +24,7 @@ public class NewClientSignUpRequest {
     @Email(message = "Email should be valid")
     private String email;
 
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Phone number must be between 10 and 15 digits")
     @NotBlank(message = "Phone number cannot be blank")
     private String phoneNumber;
 
@@ -41,10 +42,10 @@ public class NewClientSignUpRequest {
     @NotBlank(message = "Company name cannot be blank")
     private String companyName;
 
-    @NonNull
+    @NotNull(message = "Country ID cannot be null")
     private Integer countryId;
 
-    @NonNull
+    @NotNull(message = "Organization Type ID cannot be null")
     private Integer organizationTypeId;
 
     @NotBlank(message = "Registration number cannot be blank")

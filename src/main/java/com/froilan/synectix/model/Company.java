@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.froilan.synectix.model.lookup.Country;
 import com.froilan.synectix.model.lookup.OrganizationType;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
@@ -75,13 +75,17 @@ public class Company {
     @Size(max = 50, message = "Tax number cannot exceed 50 characters")
     private String taxNumber;
 
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     /**
      * The country of the company.
      * This variable is used to display the company's country in the application.
      */
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
@@ -92,7 +96,7 @@ public class Company {
      */
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "organization_type_id", nullable = false)
     private OrganizationType organizationType;
 }
