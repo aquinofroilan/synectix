@@ -33,7 +33,7 @@ public class LookupController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/countries")
-    public List<Country> getMethodName(HttpServletRequest request) {
+    public List<Country> getCountries(HttpServletRequest request) {
         logger.info(LocalDateTime.now().toString(),
                 " - Lookup request from IP: {}" + GetClientIP.extractClientIp(request));
         return ResponseEntity.ok(lookupService.getAllCountries()).getBody();

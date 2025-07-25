@@ -9,9 +9,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
 
+@Getter
 @Entity
-@Table(name = "organization_types", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "id" }))
+@Table(name = "organization_type", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "id" }))
 public class OrganizationType {
 
     @Id
