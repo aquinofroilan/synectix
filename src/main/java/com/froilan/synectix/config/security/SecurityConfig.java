@@ -12,6 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import jakarta.servlet.http.HttpServletResponse;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -21,15 +24,22 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(withDefaults()).csrf(AbstractHttpConfigurer::disable).formLogin(
-                AbstractHttpConfigurer::disable).logout(
+                AbstractHttpConfigurer::disable)
+                .logout(
                         AbstractHttpConfigurer::disable)
                 .rememberMe(AbstractHttpConfigurer::disable).httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(withDefaults()))
+                // .oauth2ResourceServer(oauth2 -> oauth2
+                // .jwt(withDefaults())
+                // .authenticationEntryPoint((request, response, authException) -> {
+                // response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                // authException.getMessage());
+                // }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/lookup/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(withDefaults()));
         return http.getOrBuild();
     }
 
