@@ -5,8 +5,10 @@ import java.util.UUID;
 import com.froilan.synectix.model.lookup.Country;
 import com.froilan.synectix.model.lookup.OrganizationType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -79,8 +81,8 @@ public class Company {
      */
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "country_id", nullable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
     /**
@@ -90,7 +92,7 @@ public class Company {
      */
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
     @JoinColumn(name = "organization_type_id", nullable = false)
     private OrganizationType organizationType;
 }
