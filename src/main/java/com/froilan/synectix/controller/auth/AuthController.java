@@ -68,14 +68,22 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(
+    public ResponseEntity<Map<String, String>> signUp(
             @Valid @RequestBody NewClientSignUpRequest request) {
         logger.info(LocalDateTime.now().toString(), " - Sign up request for user: {}", request.getEmail());
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
+        if (!request.getPassword().equals(request.getConfirmPassword()))
             throw new PasswordMismatchException("Passwords do not match");
-        }
-        authenticationService.SignUpUser(request);
-        return ResponseEntity.ok("Sign up successful");
+        Map<String, String> tokens = authenticationService.SignUpUser(request);
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", tokens.get("refreshToken"))
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/api/auth/refresh")
+                .maxAge(Duration.ofDays(30))
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                .body(Map.of("access_token", tokens.get("accessToken")));
     }
 
 }

@@ -52,7 +52,7 @@ public class AuthenticationService {
     }
 
     @Transactional(rollbackFor = { ConflictException.class })
-    public void SignUpUser(NewClientSignUpRequest request) {
+    public Map<String, String> SignUpUser(NewClientSignUpRequest request) {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new ConflictException("email", "Email already in use.");
 
@@ -93,5 +93,8 @@ public class AuthenticationService {
         user.setCompany(company);
         userRepository.save(user);
 
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
+        String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUuid().toString());
+        return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 }
