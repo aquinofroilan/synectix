@@ -1,7 +1,5 @@
 package com.froilan.synectix.service.auth;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,17 +42,15 @@ public class AuthenticationService {
     }
 
     public Map<String, String> SignInUser(String username, String password) {
-        return userRepository.findByEmail(username)
-                .map(user -> {
-                    if (passwordEncoder.matches(password, user.getHashedPassword())) {
-                        user.setLastLogin(LocalDateTime.now());
-                        String token = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
-                        return Collections.singletonMap("jwt-token", token);
-                    } else {
-                        throw new WrongPasswordException("The password you entered is incorrect.");
-                    }
-                })
-                .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist."));
+        if (!userRepository.existsByEmail(username) && !userRepository.existsByUsername(username))
+            throw new UserNotFoundException("User with that email or username does not exist.");
+        User user = userRepository.findByEmail(username).orElseGet(() -> userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist.")));
+        if (!passwordEncoder.matches(password, user.getHashedPassword()))
+            throw new WrongPasswordException("Wrong password.");
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
+        String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUuid().toString());
+        return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 
     public void SignUpUser(NewClientSignUpRequest request) {
