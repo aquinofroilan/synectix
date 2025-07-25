@@ -18,7 +18,7 @@ public class JWTConfig {
     }
 
     @Bean
-    public RSAPublicKey rsaPublicKey() throws Exception {
+public RSAPublicKey rsaPublicKey() throws Exception {
         return jwtKeyLoader.loadPublicKey();
     }
 

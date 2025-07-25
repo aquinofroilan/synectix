@@ -44,4 +44,13 @@ public class JWTUtil {
         DecodedJWT jwt = verifier.verify(token);
         return jwt.getClaim("username").asString();
     }
+
+    public String refreshToken(String username, String string) {
+        return JWT.create()
+                .withSubject(string)
+                .withClaim("username", username)
+                .withIssuedAt(new Date())
+                .withIssuer("auth0")
+                .sign(algorithm);
+    }
 }

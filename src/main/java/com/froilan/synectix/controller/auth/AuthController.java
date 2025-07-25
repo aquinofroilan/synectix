@@ -1,5 +1,6 @@
 package com.froilan.synectix.controller.auth;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -8,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 
 import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
@@ -36,8 +39,17 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody SignInRequest request) {
         logger.info(LocalDateTime.now().toString(), " - Sign in request for user: {}", request.getUser());
-        Map<String, String> token = this.authenticationService.SignInUser(request.getUser(), request.getPassword());
-        return ResponseEntity.ok(token);
+        Map<String, String> tokens = this.authenticationService.SignInUser(request.getUser(), request.getPassword());
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", tokens.get("refreshToken"))
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/api/auth/refresh")
+                .maxAge(Duration.ofDays(30))
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                .body(Map.of("access_token", tokens.get("accessToken")));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
