@@ -1,15 +1,10 @@
 package com.froilan.synectix.service.auth;
 
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.froilan.synectix.config.security.jwt.JWTUtil;
 import com.froilan.synectix.exception.authentication.ConflictException;
 import com.froilan.synectix.exception.authentication.UserNotFoundException;
 import com.froilan.synectix.exception.authentication.WrongPasswordException;
+import com.froilan.synectix.exception.validation.NotFoundException;
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
@@ -19,7 +14,11 @@ import com.froilan.synectix.repository.CompanyRepository;
 import com.froilan.synectix.repository.CountryRepository;
 import com.froilan.synectix.repository.OrganizationTypeRepository;
 import com.froilan.synectix.repository.user.UserRepository;
-import com.froilan.synectix.exception.validation.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class AuthenticationService {
