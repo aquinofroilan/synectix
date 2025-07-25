@@ -3,15 +3,17 @@ package com.froilan.synectix.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -133,7 +135,7 @@ public class User {
 
     @Setter
     @Getter
-    @Column(nullable = false, name = "last_login", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = true, name = "last_login", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime lastLogin;
 
     /**
@@ -141,13 +143,8 @@ public class User {
      * This variable is used to display the user's creation time in the
      * application.
      */
-    @Getter
-    @Setter
-    @Column(nullable = false, unique = true, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @NotBlank(message = "Created at cannot be blank")
-    @Size(max = 50, message = "Created at cannot exceed 50 characters")
+    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @PastOrPresent(message = "Created at must be in the past or present")
-    @FutureOrPresent(message = "Created at must be in the past or present")
     @NotNull(message = "Created at cannot be null")
     private LocalDateTime createdAt;
 
@@ -158,8 +155,18 @@ public class User {
      */
     @Getter
     @Setter
-    @Column(nullable = false, unique = true, name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @PastOrPresent(message = "Updated at must be in the past or present")
     private LocalDateTime updatedAt;
+
+    /**
+     * The company associated with the user.
+     * This variable is used to display the user's company in the application.
+     */
+    @Getter
+    @Setter
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Company company;
 
     @Override
     public String toString() {

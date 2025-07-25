@@ -35,7 +35,6 @@ public class LookupService {
      * @return a list of all organization types
      */
     public List<OrganizationType> getAllOrganizationTypes() {
-        System.out.println(organizationTypeRepository.findAll());
         return organizationTypeRepository.findAll();
     }
 }

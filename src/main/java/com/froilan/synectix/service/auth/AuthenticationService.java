@@ -10,14 +10,15 @@ import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
 import com.froilan.synectix.model.lookup.Country;
 import com.froilan.synectix.model.lookup.OrganizationType;
-import com.froilan.synectix.repository.CompanyRepository;
 import com.froilan.synectix.repository.CountryRepository;
 import com.froilan.synectix.repository.OrganizationTypeRepository;
 import com.froilan.synectix.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -26,16 +27,14 @@ public class AuthenticationService {
     private JWTUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final CompanyRepository companyRepository;
     private final CountryRepository countryRepository;
     private final OrganizationTypeRepository organizationTypeRepository;
 
     public AuthenticationService(PasswordEncoder passwordEncoder, UserRepository userRepository,
-            CompanyRepository companyRepository, CountryRepository countryRepository,
+            CountryRepository countryRepository,
             OrganizationTypeRepository organizationTypeRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.companyRepository = companyRepository;
         this.countryRepository = countryRepository;
         this.organizationTypeRepository = organizationTypeRepository;
     }
@@ -52,6 +51,7 @@ public class AuthenticationService {
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 
+    @Transactional(rollbackFor = { ConflictException.class })
     public void SignUpUser(NewClientSignUpRequest request) {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new ConflictException("email", "Email already in use.");
@@ -66,24 +66,32 @@ public class AuthenticationService {
                 .orElseThrow(() -> new NotFoundException("Country not found."));
         OrganizationType organizationType = organizationTypeRepository.findById(request.getOrganizationTypeId())
                 .orElseThrow(() -> new NotFoundException("Organization type not found."));
-
         String hashedPassword = passwordEncoder.encode(request.getPassword());
-        User user = User.builder().username(request.getUsername())
+        LocalDateTime now = LocalDateTime.now();
+
+        User user = User.builder()
+                .username(request.getUsername())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .hashedPassword(hashedPassword)
+                .createdAt(now)
+                .updatedAt(now)
+                .lastLogin(now)
                 .build();
-        userRepository.save(user);
+
         Company company = Company.builder()
                 .name(request.getCompanyName())
                 .registrationNumber(request.getRegistrationNumber())
                 .taxNumber(request.getTaxNumber())
                 .country(country)
                 .organizationType(organizationType)
+                .user(user)
                 .build();
-        companyRepository.save(company);
+
+        user.setCompany(company);
+        userRepository.save(user);
 
     }
 }
