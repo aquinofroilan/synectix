@@ -56,7 +56,7 @@ public class AuthController {
                 .body(Map.of("access_token", tokens.get("accessToken")));
     }
 
-    @PostMapping("/auth/refresh")
+    @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@CookieValue("refresh_token") String refreshToken) {
         if (!jwtUtil.isValid(refreshToken)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");

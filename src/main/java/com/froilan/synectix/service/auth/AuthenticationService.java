@@ -42,10 +42,7 @@ public class AuthenticationService {
     }
 
     public Map<String, String> SignInUser(String username, String password) {
-        if (!userRepository.existsByEmail(username))
-            throw new UserNotFoundException("User with that email or username does not exist.");
-
-        if (!userRepository.existsByUsername(username))
+        if (!userRepository.existsByEmail(username) && !userRepository.existsByUsername(username))
             throw new UserNotFoundException("User with that email or username does not exist.");
         User user = userRepository.findByEmail(username).orElseGet(() -> userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist.")));

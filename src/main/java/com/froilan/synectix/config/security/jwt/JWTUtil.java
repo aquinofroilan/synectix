@@ -37,7 +37,6 @@ public class JWTUtil {
 
     public String validateTokenAndRetrieveSubject(String token) throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(algorithm)
-                .withSubject("User UUID")
                 .withIssuer("auth0")
                 .build();
 
