@@ -22,6 +22,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -147,7 +148,7 @@ public class User {
      */
     @Getter
     @Setter
-    @Column(name = "last_login", nullable = true)
+    @Column(name = "last_login")
     private Instant lastLogin;
 
     /**
@@ -182,16 +183,4 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Company company;
 
-    @Override
-    public String toString() {
-        return "User{" +
-            ", uuid='" + uuid + '\'' +
-            ", username='" + username + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", phoneNumber='" + phoneNumber + '\'' +
-            ", hashedPassword='" + hashedPassword + '\'' +
-            '}';
-    }
 }
