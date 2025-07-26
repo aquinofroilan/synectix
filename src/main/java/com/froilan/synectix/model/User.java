@@ -1,25 +1,31 @@
 package com.froilan.synectix.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
-import org.checkerframework.common.value.qual.BoolVal;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -28,14 +34,18 @@ import lombok.Setter;
  * last name, email, role, and password.
  */
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "username", "email", "uuid",
-        "phone_number" }))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "email", "uuid",
+    "phone_number"}))
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     /**
      * The UUID of the user.
      * This variable is used to display the user's UUID in the application.
      */
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID uuid;
@@ -103,7 +113,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "hashed_password", length = 255, columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, unique = true, name = "hashed_password", columnDefinition = "VARCHAR(255)")
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters")
     private String hashedPassword;
@@ -115,7 +125,7 @@ public class User {
      */
     @Getter
     @Setter
-    @BoolVal(value = false)
+    @Builder.Default
     @Column(nullable = false, name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted = false;
 
@@ -124,11 +134,21 @@ public class User {
      * This variable is used to display the user's active status in the
      * application.
      */
-    @Setter
     @Getter
-    @BoolVal(value = true)
+    @Setter
+    @Builder.Default
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean isActive = true;
+
+    /**
+     * The timestamp when the user last logged in.
+     * This variable is used to display the user's last login time in the
+     * application.
+     */
+    @Getter
+    @Setter
+    @Column(name = "last_login", nullable = true)
+    private Instant lastLogin;
 
     /**
      * The timestamp when the user was created.
@@ -136,14 +156,11 @@ public class User {
      * application.
      */
     @Getter
-    @Setter
-    @Column(nullable = false, unique = true, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @NotBlank(message = "Created at cannot be blank")
-    @Size(max = 50, message = "Created at cannot exceed 50 characters")
+    @CreatedDate
+    @Column(nullable = false, name = "created_at", updatable = false)
     @PastOrPresent(message = "Created at must be in the past or present")
-    @FutureOrPresent(message = "Created at must be in the past or present")
     @NotNull(message = "Created at cannot be null")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     /**
      * The timestamp when the user was last updated.
@@ -151,20 +168,30 @@ public class User {
      * application.
      */
     @Getter
+    @LastModifiedDate
+    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @PastOrPresent(message = "Updated at must be in the past or present")
+    private Instant updatedAt;
+
+    /**
+     * The company associated with the user.
+     * This variable is used to display the user's company in the application.
+     */
+    @Getter
     @Setter
-    @Column(nullable = false, unique = true, name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime updatedAt;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Company company;
 
     @Override
     public String toString() {
         return "User{" +
-                ", uuid='" + uuid + '\'' +
-                ", username='" + username + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", hashedPassword='" + hashedPassword + '\'' +
-                '}';
+            ", uuid='" + uuid + '\'' +
+            ", username='" + username + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", hashedPassword='" + hashedPassword + '\'' +
+            '}';
     }
 }
