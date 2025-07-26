@@ -14,11 +14,11 @@ import com.froilan.synectix.model.lookup.OrganizationType;
 import com.froilan.synectix.repository.CountryRepository;
 import com.froilan.synectix.repository.OrganizationTypeRepository;
 import com.froilan.synectix.repository.user.UserRepository;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -39,11 +39,9 @@ public class AuthenticationService {
         this.jwtUtil = jwtUtil;
     }
 
-    public Map<String, String> SignInUser(String username, String password) {
-        if (!userRepository.existsByEmail(username) && !userRepository.existsByUsername(username))
-            throw new UserNotFoundException("User with that email or username does not exist.");
-        User user = userRepository.findByEmail(username).orElseGet(() -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist.")));
+    public Map<String, String> signInUser(String username, String password) {
+        User user = userRepository.findByEmail(username).or(() -> userRepository.findByUsername(username))
+                .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist."));
         if (!passwordEncoder.matches(password, user.getHashedPassword()))
             throw new WrongPasswordException("Wrong password.");
         String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
@@ -52,7 +50,7 @@ public class AuthenticationService {
     }
 
     @Transactional(rollbackFor = { ConflictException.class })
-    public Map<String, String> SignUpUser(NewClientSignUpRequest request) {
+    public Map<String, String> signUpUser(NewClientSignUpRequest request) {
         if (!request.getPassword().equals(request.getConfirmPassword()))
             throw new PasswordMismatchException("Passwords do not match");
         if (userRepository.existsByEmail(request.getEmail()))
@@ -69,7 +67,6 @@ public class AuthenticationService {
         OrganizationType organizationType = organizationTypeRepository.findById(request.getOrganizationTypeId())
                 .orElseThrow(() -> new NotFoundException("Organization type not found."));
         String hashedPassword = passwordEncoder.encode(request.getPassword());
-        LocalDateTime now = LocalDateTime.now();
 
         User user = User.builder()
                 .username(request.getUsername())
@@ -78,9 +75,6 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .hashedPassword(hashedPassword)
-                .createdAt(now)
-                .updatedAt(now)
-                .lastLogin(now)
                 .build();
 
         Company company = Company.builder()

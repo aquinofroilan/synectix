@@ -40,8 +40,8 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/signin")
     public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody SignInRequest request) {
-        logger.info(LocalDateTime.now().toString(), " - Sign in request for user: {}", request.getUser());
-        Map<String, String> tokens = this.authenticationService.SignInUser(request.getUser(), request.getPassword());
+        logger.info("{} - Sign in request for user: {}", LocalDateTime.now(), request.getUser());
+        Map<String, String> tokens = this.authenticationService.signInUser(request.getUser(), request.getPassword());
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", tokens.get("refreshToken"))
                 .httpOnly(true)
                 .secure(true)
@@ -54,8 +54,10 @@ public class AuthController {
                 .body(Map.of("access_token", tokens.get("accessToken")));
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@CookieValue("refresh_token") String refreshToken) {
+        logger.info("{} - Refresh token request", LocalDateTime.now());
         if (!jwtUtil.isValid(refreshToken)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
         }
@@ -68,8 +70,8 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<Map<String, String>> signUp(
             @Valid @RequestBody NewClientSignUpRequest request) {
-        logger.info(LocalDateTime.now().toString(), " - Sign up request for user: {}", request.getEmail());
-        Map<String, String> tokens = authenticationService.SignUpUser(request);
+        logger.info("{} - Sign up request for user: {}", LocalDateTime.now(), request.getEmail());
+        Map<String, String> tokens = authenticationService.signUpUser(request);
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", tokens.get("refreshToken"))
                 .httpOnly(true)
                 .secure(true)

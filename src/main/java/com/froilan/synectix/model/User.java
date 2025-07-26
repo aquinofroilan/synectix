@@ -1,7 +1,10 @@
 package com.froilan.synectix.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,8 +34,8 @@ import lombok.Setter;
  * last name, email, role, and password.
  */
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "username", "email", "uuid",
-        "phone_number" }))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "email", "uuid",
+    "phone_number"}))
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -137,11 +140,15 @@ public class User {
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean isActive = true;
 
-    @Setter
+    /**
+     * The timestamp when the user last logged in.
+     * This variable is used to display the user's last login time in the
+     * application.
+     */
     @Getter
-    @Builder.Default
-    @Column(name = "last_login", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime lastLogin = LocalDateTime.now();
+    @Setter
+    @Column(name = "last_login", nullable = true)
+    private Instant lastLogin;
 
     /**
      * The timestamp when the user was created.
@@ -149,11 +156,11 @@ public class User {
      * application.
      */
     @Getter
-    @Builder.Default
-    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @CreatedDate
+    @Column(nullable = false, name = "created_at", updatable = false)
     @PastOrPresent(message = "Created at must be in the past or present")
     @NotNull(message = "Created at cannot be null")
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private Instant createdAt;
 
     /**
      * The timestamp when the user was last updated.
@@ -161,10 +168,10 @@ public class User {
      * application.
      */
     @Getter
-    @Setter
-    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @LastModifiedDate
+    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     @PastOrPresent(message = "Updated at must be in the past or present")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     /**
      * The company associated with the user.
@@ -178,13 +185,13 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                ", uuid='" + uuid + '\'' +
-                ", username='" + username + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", hashedPassword='" + hashedPassword + '\'' +
-                '}';
+            ", uuid='" + uuid + '\'' +
+            ", username='" + username + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", hashedPassword='" + hashedPassword + '\'' +
+            '}';
     }
 }
