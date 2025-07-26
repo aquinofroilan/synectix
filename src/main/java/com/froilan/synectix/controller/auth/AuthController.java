@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 
 import com.froilan.synectix.config.security.jwt.JWTUtil;
-import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
 import com.froilan.synectix.model.dto.request.authentication.SignInRequest;
 import com.froilan.synectix.service.auth.AuthenticationService;
@@ -70,8 +69,6 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> signUp(
             @Valid @RequestBody NewClientSignUpRequest request) {
         logger.info(LocalDateTime.now().toString(), " - Sign up request for user: {}", request.getEmail());
-        if (!request.getPassword().equals(request.getConfirmPassword()))
-            throw new PasswordMismatchException("Passwords do not match");
         Map<String, String> tokens = authenticationService.SignUpUser(request);
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", tokens.get("refreshToken"))
                 .httpOnly(true)
@@ -80,7 +77,8 @@ public class AuthController {
                 .path("/api/auth/refresh")
                 .maxAge(Duration.ofDays(30))
                 .build();
-        return ResponseEntity.ok()
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .body(Map.of("access_token", tokens.get("accessToken")));
     }

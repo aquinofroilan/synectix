@@ -2,6 +2,7 @@ package com.froilan.synectix.service.auth;
 
 import com.froilan.synectix.config.security.jwt.JWTUtil;
 import com.froilan.synectix.exception.authentication.ConflictException;
+import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.exception.authentication.UserNotFoundException;
 import com.froilan.synectix.exception.authentication.WrongPasswordException;
 import com.froilan.synectix.exception.validation.NotFoundException;
@@ -13,7 +14,6 @@ import com.froilan.synectix.model.lookup.OrganizationType;
 import com.froilan.synectix.repository.CountryRepository;
 import com.froilan.synectix.repository.OrganizationTypeRepository;
 import com.froilan.synectix.repository.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +23,7 @@ import java.util.Map;
 
 @Service
 public class AuthenticationService {
-    @Autowired
-    private JWTUtil jwtUtil;
+    private final JWTUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
@@ -32,11 +31,12 @@ public class AuthenticationService {
 
     public AuthenticationService(PasswordEncoder passwordEncoder, UserRepository userRepository,
             CountryRepository countryRepository,
-            OrganizationTypeRepository organizationTypeRepository) {
+            OrganizationTypeRepository organizationTypeRepository, JWTUtil jwtUtil) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.countryRepository = countryRepository;
         this.organizationTypeRepository = organizationTypeRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public Map<String, String> SignInUser(String username, String password) {
@@ -53,6 +53,8 @@ public class AuthenticationService {
 
     @Transactional(rollbackFor = { ConflictException.class })
     public Map<String, String> SignUpUser(NewClientSignUpRequest request) {
+        if (!request.getPassword().equals(request.getConfirmPassword()))
+            throw new PasswordMismatchException("Passwords do not match");
         if (userRepository.existsByEmail(request.getEmail()))
             throw new ConflictException("email", "Email already in use.");
 
