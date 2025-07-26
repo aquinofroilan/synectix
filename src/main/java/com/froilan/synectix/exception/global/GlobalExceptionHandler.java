@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ApiError> handleEmailTaken(ConflictException ex) {
-        ApiError error = new ApiError("CONFLICT_EXCEPTION", ex.getMessage() + ex.getField());
+        ApiError error = new ApiError("CONFLICT_EXCEPTION", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 

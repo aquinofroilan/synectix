@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.froilan.synectix.model.lookup.Country;
 import com.froilan.synectix.model.lookup.OrganizationType;
 import com.froilan.synectix.service.lookup.LookupService;
-import com.froilan.synectix.util.RequestLogger;
 import com.froilan.synectix.util.security.GetClientIP;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +23,7 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/api/lookup")
 public class LookupController {
-    private static final Logger logger = LoggerFactory.getLogger(RequestLogger.class);
+    private static final Logger logger = LoggerFactory.getLogger(LookupController.class);
     private final LookupService lookupService;
 
     public LookupController(LookupService lookupService) {

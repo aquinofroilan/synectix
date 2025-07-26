@@ -8,6 +8,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
@@ -26,6 +27,7 @@ public class JWTUtil {
                     .withSubject(uuidString)
                     .withClaim("username", username)
                     .withIssuedAt(new Date())
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 3600000))
                     .withIssuer("auth0")
                     .sign(algorithm);
         } catch (IllegalArgumentException e) {
@@ -45,13 +47,26 @@ public class JWTUtil {
     }
 
     public String getUsernameFromToken(String token) {
-        DecodedJWT jwt = JWT.decode(token);
-        return jwt.getClaim("username").asString();
+        try {
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("auth0")
+                    .build();
+            DecodedJWT jwt = verifier.verify(token);
+            return jwt.getClaim("username").asString();
+        } catch (JWTVerificationException e) {
+            throw new RuntimeException("Invalid token", e);
+        }
     }
 
     public String getUuidFromToken(String token) {
-        DecodedJWT jwt = JWT.decode(token);
-        return jwt.getSubject();
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getSubject();
+        } catch (JWTDecodeException e) {
+            throw new RuntimeException("Failed to decode token", e);
+        } catch (JWTVerificationException e) {
+            throw new RuntimeException("Invalid token", e);
+        }
     }
 
     public boolean isValid(String token) {

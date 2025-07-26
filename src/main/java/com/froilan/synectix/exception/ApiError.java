@@ -1,7 +1,10 @@
 package com.froilan.synectix.exception;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class ApiError {
     private final String errorCode;
     private final String message;
@@ -13,15 +16,4 @@ public class ApiError {
         this.timestamp = LocalDateTime.now();
     }
 
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
 }

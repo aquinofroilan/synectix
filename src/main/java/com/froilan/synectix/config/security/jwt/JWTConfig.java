@@ -18,8 +18,12 @@ public class JWTConfig {
     }
 
     @Bean
-    RSAPublicKey rsaPublicKey() throws Exception {
-        return jwtKeyLoader.loadPublicKey();
+    RSAPublicKey rsaPublicKey() {
+        try {
+            return jwtKeyLoader.loadPublicKey();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load RSA public key", e);
+        }
     }
 
     @Bean

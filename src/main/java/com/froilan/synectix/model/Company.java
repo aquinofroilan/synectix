@@ -75,6 +75,8 @@ public class Company {
     @Size(max = 50, message = "Tax number cannot exceed 50 characters")
     private String taxNumber;
 
+    @Getter
+    @Setter
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

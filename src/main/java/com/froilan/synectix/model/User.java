@@ -121,8 +121,10 @@ public class User {
      * application.
      */
     @Getter
+    @Setter
+    @Builder.Default
     @Column(nullable = false, name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private final boolean isDeleted = false;
+    private boolean isDeleted = false;
 
     /**
      * Indicates whether the user is active.
@@ -130,23 +132,28 @@ public class User {
      * application.
      */
     @Getter
+    @Setter
+    @Builder.Default
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private final boolean isActive = true;
+    private boolean isActive = true;
 
     @Setter
     @Getter
-    @Column(nullable = true, name = "last_login", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime lastLogin;
+    @Builder.Default
+    @Column(name = "last_login", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime lastLogin = LocalDateTime.now();
 
     /**
      * The timestamp when the user was created.
      * This variable is used to display the user's creation time in the
      * application.
      */
+    @Getter
+    @Builder.Default
     @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @PastOrPresent(message = "Created at must be in the past or present")
     @NotNull(message = "Created at cannot be null")
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     /**
      * The timestamp when the user was last updated.

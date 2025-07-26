@@ -18,7 +18,6 @@ import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
 import com.froilan.synectix.model.dto.request.authentication.SignInRequest;
 import com.froilan.synectix.service.auth.AuthenticationService;
-import com.froilan.synectix.util.RequestLogger;
 
 import jakarta.validation.Valid;
 
@@ -30,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    private static final Logger logger = LoggerFactory.getLogger(RequestLogger.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthenticationService authenticationService;
     private final JWTUtil jwtUtil;
 
