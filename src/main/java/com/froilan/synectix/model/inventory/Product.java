@@ -1,11 +1,10 @@
 package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.Company;
-
-import jakarta.persistence.FetchType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,10 +53,10 @@ public class Product {
     @Column(nullable = false, name = "description", columnDefinition = "VARCHAR(255)")
     private String description;
 
-//    @Getter
-//    @Setter
-//    @OneToOne(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-//    private ProductCategory productCategory;
+    @Getter
+    @Setter
+    @OneToOne(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private ProductCategory productCategory;
 
     @Getter
     @Setter
