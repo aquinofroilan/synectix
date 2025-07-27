@@ -1,6 +1,7 @@
 package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.Company;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,12 +22,12 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity()
-@Table(name = "warehouse", uniqueConstraints = @UniqueConstraint(columnNames = { "uuid", "registration_number",
-    "tax_number" }))
+@Table(name = "warehouse", uniqueConstraints = @UniqueConstraint(columnNames = {"warehouse_uuid"}))
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Warehouse {
+
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
