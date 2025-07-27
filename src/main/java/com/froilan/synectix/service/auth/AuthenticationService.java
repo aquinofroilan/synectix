@@ -51,7 +51,7 @@ public class AuthenticationService {
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 
-    @Transactional(rollbackFor = {ConflictException.class})
+    @Transactional(rollbackFor = {ConflictException.class, PasswordMismatchException.class, NotFoundException.class})
     public Map<String, String> signUpUser(NewClientSignUpRequest request) throws ConflictException,
         PasswordMismatchException, NotFoundException {
         if (!request.getPassword().equals(request.getConfirmPassword()))

@@ -13,6 +13,7 @@ import com.froilan.synectix.exception.authentication.UserNotFoundException;
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.company.NewCompanyUserRequest;
 import com.froilan.synectix.repository.user.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserManagementService {
@@ -24,7 +25,8 @@ public class UserManagementService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void createUser(NewCompanyUserRequest newUserRequest) {
+    @Transactional(rollbackFor = {ConflictException.class, PasswordMismatchException.class})
+    public void createUser(NewCompanyUserRequest newUserRequest) throws PasswordMismatchException, ConflictException {
         if (!newUserRequest.getPassword().equals(newUserRequest.getConfirmPassword()))
             throw new PasswordMismatchException("Passwords do not match");
         if (userRepository.existsByEmail(newUserRequest.getEmail()))
@@ -45,7 +47,7 @@ public class UserManagementService {
         userRepository.save(user);
     }
 
-    public void deleteUserByUUID(String userUUID) {
+    public void deleteUserByUUID(String userUUID) throws UserNotFoundException {
         userRepository.findById(UUID.fromString(userUUID)).ifPresentOrElse(user -> {
             user.setDeleted(true);
             userRepository.save(user);
@@ -54,7 +56,7 @@ public class UserManagementService {
         });
     }
 
-    public void deactivateUserByUUID(String userUUID) {
+    public void deactivateUserByUUID(String userUUID) throws UserNotFoundException {
         userRepository.findById(UUID.fromString(userUUID)).ifPresentOrElse(user -> {
             user.setActive(false);
             userRepository.save(user);
@@ -63,19 +65,19 @@ public class UserManagementService {
         });
     }
 
-    public List<User> searchUser(String searchTerm) {
+    public List<User> searchUser(String searchTerm) throws UserNotFoundException {
         List<User> user = userRepository.searchByTerm(searchTerm);
         if (user.isEmpty())
             throw new UserNotFoundException("No users found matching the search term: " + searchTerm);
         return user;
     }
 
-    public User getUserByUUID(String userUUID) {
+    public User getUserByUUID(String userUUID) throws UserNotFoundException {
         return userRepository.findById(UUID.fromString(userUUID))
             .orElseThrow(() -> new UserNotFoundException("User not found with UUID: " + userUUID));
     }
 
-    public  Optional<User> getAllCompanyUsers() {
+    public  Optional<User> getAllCompanyUsers() throws UserNotFoundException {
         Optional<User> users = userRepository.findByCompany_Uuid(UUID.randomUUID());
         if (users.isEmpty()) {
             throw new UserNotFoundException("No users found in the company.");
