@@ -15,7 +15,7 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 
 @Entity
-@Table(name = "country", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
+@Table(name = "country", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Country {
     /**
      * The ID of the country.
@@ -31,8 +31,8 @@ public class Country {
      * This variable is used to display the country's name in the application.
      */
     @Getter
-    @Column(nullable = false, unique = true, name = "code", length = 2, columnDefinition = "CHAR(2)")
-    private String code;
+    @Column(nullable = false, unique = true, name = "name", columnDefinition = "VARCHAR(50)")
+    private String name;
 
     @OneToMany(mappedBy = "country")
     private List<Company> companies;
