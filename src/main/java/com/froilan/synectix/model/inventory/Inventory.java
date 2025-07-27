@@ -1,6 +1,5 @@
 package com.froilan.synectix.model.inventory;
 
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,15 +20,16 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity()
-@Table(name = "inventory", uniqueConstraints = @UniqueConstraint(columnNames = {"warehouse_uuid"}))
+@Table(name = "inventory", uniqueConstraints = @UniqueConstraint(columnNames = {"inventory_uuid", "warehouse_uuid", "product_uuid"}))
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Inventory {
 
     /**
-     * The UUID of the company.
-     * This variable is used to display the company's UUID in the application.
+     * Unique identifier for the inventory record.
+     * This is a UUID that is generated automatically.
+     * It is used to uniquely identify each inventory record in the database.
      */
     @Getter
     @Id
@@ -41,8 +40,14 @@ public class Inventory {
     @Getter
     @Setter
     @OneToOne(mappedBy = "inventory", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "warehouse_uuid", referencedColumnName = "warehouse_uuid", nullable = false)
+    @JoinColumn(name = "fk_product_uuid", referencedColumnName = "warehouse_uuid", nullable = false)
     private Product product;
+
+    @Getter
+    @Setter
+    @OneToOne(mappedBy = "inventory", cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_warehouse_uuid", referencedColumnName = "warehouse_uuid", nullable = false)
+    private Warehouse warehouse;
 
     @Getter
     @Setter
