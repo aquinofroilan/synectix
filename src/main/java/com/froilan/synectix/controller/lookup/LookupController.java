@@ -3,6 +3,7 @@ package com.froilan.synectix.controller.lookup;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.froilan.synectix.model.lookup.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,14 @@ public class LookupController {
         logger.info(LocalDateTime.now().toString(),
                 " - Lookup request from IP: {}" + GetClientIP.extractClientIp(request));
         return ResponseEntity.ok(lookupService.getAllOrganizationTypes()).getBody();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/roles")
+    public List<Role> getRoles(HttpServletRequest request) {
+        logger.info(LocalDateTime.now().toString(),
+                " - Lookup request for roles from IP: {}" + GetClientIP.extractClientIp(request));
+        return lookupService.getAllRoles();
     }
 
 }

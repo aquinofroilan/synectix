@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Map;
 
 @Service
@@ -30,8 +31,8 @@ public class AuthenticationService {
     private final OrganizationTypeRepository organizationTypeRepository;
 
     public AuthenticationService(PasswordEncoder passwordEncoder, UserRepository userRepository,
-            CountryRepository countryRepository,
-            OrganizationTypeRepository organizationTypeRepository, JWTUtil jwtUtil) {
+                                 CountryRepository countryRepository,
+                                 OrganizationTypeRepository organizationTypeRepository, JWTUtil jwtUtil) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.countryRepository = countryRepository;
@@ -39,9 +40,10 @@ public class AuthenticationService {
         this.jwtUtil = jwtUtil;
     }
 
-    public Map<String, String> signInUser(String username, String password) {
+    public Map<String, String> signInUser(String username, String password) throws UserNotFoundException,
+        WrongPasswordException {
         User user = userRepository.findByEmail(username).or(() -> userRepository.findByUsername(username))
-                .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist."));
+            .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist."));
         if (!passwordEncoder.matches(password, user.getHashedPassword()))
             throw new WrongPasswordException("Wrong password.");
         String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
@@ -49,42 +51,46 @@ public class AuthenticationService {
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 
-    @Transactional(rollbackFor = { ConflictException.class })
-    public Map<String, String> signUpUser(NewClientSignUpRequest request) {
+    @Transactional(rollbackFor = {ConflictException.class, PasswordMismatchException.class, NotFoundException.class})
+    public Map<String, String> signUpUser(NewClientSignUpRequest request) throws ConflictException,
+        PasswordMismatchException, NotFoundException {
         if (!request.getPassword().equals(request.getConfirmPassword()))
             throw new PasswordMismatchException("Passwords do not match");
         if (userRepository.existsByEmail(request.getEmail()))
             throw new ConflictException("email", "Email already in use.");
 
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber()))
-            throw new ConflictException("phone number", "Phone number already in use.");
+            throw new ConflictException("phoneNumber", "Phone number already in use.");
 
         if (userRepository.existsByUsername(request.getUsername()))
             throw new ConflictException("username", "Username already in use.");
 
         Country country = countryRepository.findById(request.getCountryId())
-                .orElseThrow(() -> new NotFoundException("Country not found."));
+            .orElseThrow(() -> new NotFoundException("Country not found."));
         OrganizationType organizationType = organizationTypeRepository.findById(request.getOrganizationTypeId())
-                .orElseThrow(() -> new NotFoundException("Organization type not found."));
+            .orElseThrow(() -> new NotFoundException("Organization type not found."));
         String hashedPassword = passwordEncoder.encode(request.getPassword());
+        Instant now = Instant.now();
 
         User user = User.builder()
-                .username(request.getUsername())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .phoneNumber(request.getPhoneNumber())
-                .hashedPassword(hashedPassword)
-                .build();
+            .username(request.getUsername())
+            .firstName(request.getFirstName())
+            .lastName(request.getLastName())
+            .email(request.getEmail())
+            .phoneNumber(request.getPhoneNumber())
+            .createdAt(now)
+            .updatedAt(now)
+            .hashedPassword(hashedPassword)
+            .build();
 
         Company company = Company.builder()
-                .name(request.getCompanyName())
-                .registrationNumber(request.getRegistrationNumber())
-                .taxNumber(request.getTaxNumber())
-                .country(country)
-                .organizationType(organizationType)
-                .user(user)
-                .build();
+            .name(request.getCompanyName())
+            .registrationNumber(request.getRegistrationNumber())
+            .taxNumber(request.getTaxNumber())
+            .country(country)
+            .organizationType(organizationType)
+            .user(user)
+            .build();
 
         user.setCompany(company);
         userRepository.save(user);
@@ -92,5 +98,6 @@ public class AuthenticationService {
         String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
         String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUuid().toString());
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
+
     }
 }

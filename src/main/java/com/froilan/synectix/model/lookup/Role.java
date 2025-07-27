@@ -12,7 +12,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Role {
     /**
      * The unique identifier for the role.
