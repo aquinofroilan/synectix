@@ -1,10 +1,7 @@
 package com.froilan.synectix.model;
 
-import java.util.UUID;
-
 import com.froilan.synectix.model.lookup.Country;
 import com.froilan.synectix.model.lookup.OrganizationType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,6 +21,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity()
 @Table(name = "company", uniqueConstraints = @UniqueConstraint(columnNames = { "uuid", "registration_number",
         "tax_number" }))
@@ -38,7 +37,7 @@ public class Company {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    @Column(columnDefinition = "company_uuid", updatable = false, nullable = false)
     private UUID uuid;
 
     /**

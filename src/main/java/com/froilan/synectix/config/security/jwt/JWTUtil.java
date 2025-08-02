@@ -1,6 +1,7 @@
 package com.froilan.synectix.config.security.jwt;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,13 @@ public class JWTUtil {
         this.algorithm = algorithm;
     }
 
-    public String generateToken(String username, String uuidString)
+    public String generateToken(String username, String uuidString, List<String> permissions)
             throws IllegalArgumentException, JWTCreationException {
         try {
             return JWT.create()
                     .withSubject(uuidString)
                     .withClaim("username", username)
+                    .withArrayClaim("permissions", permissions.toArray(new String[0]))
                     .withIssuedAt(new Date())
                     .withExpiresAt(new Date(System.currentTimeMillis() + 3600000))
                     .withIssuer("auth0")
