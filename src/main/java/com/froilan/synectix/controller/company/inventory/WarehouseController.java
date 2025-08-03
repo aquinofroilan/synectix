@@ -4,8 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +19,7 @@ public class WarehouseController {
     private static final Logger logger = LoggerFactory.getLogger(WarehouseController.class);
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping("/create")
+    @PostMapping
     public String createWarehouse() {
         logger.info("Creating a new warehouse");
         // Logic to create a new warehouse
@@ -24,15 +27,15 @@ public class WarehouseController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/update")
-    public String updateWarehouse() {
-        logger.info("Updating an existing warehouse");
+    @PatchMapping("/{uuid}")
+    public String updateWarehouse(@PathVariable("uuid") String uuid) {
+        logger.info("Updating an existing warehouse with UUID: {}", uuid);
         // Logic to update an existing warehouse
         return "Warehouse updated successfully";
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/delete")
+    @DeleteMapping("/{uuid}")
     public String deleteWarehouse() {
         logger.info("Deleting a warehouse");
         // Logic to delete a warehouse
@@ -40,9 +43,9 @@ public class WarehouseController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/get")
-    public String getWarehouse() {
-        logger.info("Retrieving warehouse details");
+    @GetMapping("/{uuid}")
+    public String getWarehouse(@PathVariable("uuid") String uuid) {
+        logger.info("Retrieving warehouse details for UUID: {}", uuid);
         // Logic to retrieve warehouse details
         return "Warehouse details retrieved successfully";
     }

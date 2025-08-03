@@ -5,8 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/company/inventory")
-public class InventoryClass {
-    private static final Logger logger = LoggerFactory.getLogger(InventoryClass.class);
+public class InventoryController {
+    private static final Logger logger = LoggerFactory.getLogger(InventoryController.class);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/all")
@@ -28,14 +29,14 @@ public class InventoryClass {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
-    public String getInventoryByUuid() {
-        logger.info("Fetching inventory record by UUID");
+    public String getInventoryByUuid(@PathVariable("uuid") String uuid) {
+        logger.info("Fetching inventory record by UUID: {}", uuid);
         // Logic to fetch inventory record by UUID
-        return "Inventory record fetched successfully by UUID";
+        return "Inventory record fetched successfully by UUID: " + uuid;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/create")
+    @PostMapping
     public String createInventory() {
         logger.info("Creating a new inventory record");
         // Logic to create a new inventory record
@@ -43,17 +44,17 @@ public class InventoryClass {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/update")
-    public String updateInventory() {
-        logger.info("Updating an existing inventory record");
+    @PutMapping("/{uuid}")
+    public String updateInventory(@PathVariable("uuid") String uuid) {
+        logger.info("Updating an existing inventory record with UUID: {}", uuid);
         // Logic to update an existing inventory record
         return "Inventory record updated successfully";
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/delete/{uuid}")
-    public String deleteInventory() {
-        logger.info("Deleting an inventory record by UUID");
+    @DeleteMapping("/{uuid}")
+    public String deleteInventory(@PathVariable("uuid") String uuid) {
+        logger.info("Deleting an inventory record by UUID: {}", uuid);
         // Logic to delete an inventory record by UUID
         return "Inventory record deleted successfully";
     }
