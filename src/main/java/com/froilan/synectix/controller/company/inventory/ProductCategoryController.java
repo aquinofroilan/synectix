@@ -7,9 +7,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.froilan.synectix.model.dto.request.inventory.ProductCategoryCreateBody;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/company/inventory/product-category")
@@ -18,16 +23,16 @@ public class ProductCategoryController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
-    public String createProductCategory() {
+    public String createProductCategory(@Valid @RequestBody ProductCategoryCreateBody request) {
         logger.info("Creating a new product category");
         // Logic to create a new product category
         return "Product category created successfully";
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/update")
-    public String updateProductCategory() {
-        logger.info("Updating an existing product category");
+    @PostMapping("/update/{id}")
+    public String updateProductCategory(@PathVariable("id") String id, @Valid @RequestBody ProductCategoryCreateBody request) {
+        logger.info("Updating an existing product category with ID: {}", id);
         // Logic to update an existing product category
         return "Product category updated successfully";
     }
@@ -52,7 +57,7 @@ public class ProductCategoryController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/get/{id}")
+    @GetMapping("/view/{id}")
     public String getProductCategoryById(@PathVariable("id") String id) {
         if (id == null || id.isEmpty()) {
             logger.error("Invalid ID provided for retrieval");
