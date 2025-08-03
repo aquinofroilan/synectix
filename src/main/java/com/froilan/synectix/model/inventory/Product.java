@@ -60,11 +60,13 @@ public class Product {
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean isActive = true;
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted = false;
 

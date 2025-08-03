@@ -42,7 +42,7 @@ public class InventoryTransaction {
 
     @Getter
     @Setter
-    @Column(columnDefinition = "transaction_type", nullable = false, name = "notes")
+    @Column(columnDefinition = "transaction_type", nullable = false, name = "transaction_type", length = 50)
     private String transactionType;
 
     @Getter

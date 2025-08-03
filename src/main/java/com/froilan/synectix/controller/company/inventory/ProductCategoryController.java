@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.froilan.synectix.model.dto.request.inventory.ProductCategoryCreateBody;
 
 import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/company/inventory/product-categories")
 public class ProductCategoryController {
