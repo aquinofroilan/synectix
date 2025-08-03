@@ -20,10 +20,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class AuthenticationService {
+
     private final JWTUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -46,7 +49,8 @@ public class AuthenticationService {
             .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist."));
         if (!passwordEncoder.matches(password, user.getHashedPassword()))
             throw new WrongPasswordException("Wrong password.");
-        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString(), Arrays.asList(new String[]{
+            "SAMPLE_PERMISSION"}));
         String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUuid().toString());
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
@@ -95,9 +99,11 @@ public class AuthenticationService {
         user.setCompany(company);
         userRepository.save(user);
 
-        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString(), List.of(
+            "SAMPLE_PERMISSION", "SAMPLE_PERMISSION"));
         String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUuid().toString());
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
 
     }
+
 }
