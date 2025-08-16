@@ -19,6 +19,9 @@ import lombok.Setter;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.froilan.synectix.model.Company;
 
 @Entity()
@@ -58,32 +61,69 @@ public class InventoryItems {
 
     @Getter
     @Setter
-    @Column(columnDefinition = "quantity_on_reserved", nullable = false, name = "quantity_on_reserved", precision = 15, scale = 3)
-    private Float quantityOnReserved;
+    @Column(columnDefinition = "quantity_allocated", nullable = false, name = "quantity_allocated", precision = 15, scale = 3)
+    private Float quantityAllocated;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "reorder_point", nullable = false, name = "reorder_point", precision = 15, scale = 3)
-    private Float reorderPoint;
+    @Column(columnDefinition = "quantity_available", nullable = false, name = "quantity_available", precision = 15, scale = 3)
+    private Float quantityAvailable;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "minimum_stock", nullable = false, name = "minimum_stock", precision = 15, scale = 3)
-    private Float minimumStock;
+    @Column(columnDefinition = "quantity_on_order", nullable = false, name = "quantity_on_order", precision = 15, scale = 3)
+    private Float quantityOnOrder;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "maximum_stock", nullable = false, name = "maximum_stock", precision = 15, scale = 3)
-    private Float maximumStock;
+    @Column(columnDefinition = "average_cost", nullable = false, name = "average_cost", precision = 15, scale = 3)
+    private Float averageCost;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "unit_cost", nullable = false, name = "unit_cost", precision = 15, scale = 3)
-    private Float unitCost;
+    @Column(columnDefinition = "last_cost", nullable = false, name = "last_cost", precision = 15, scale = 3)
+    private Float lastCost;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "last_count", nullable = false, name = "last_count")
-    private Instant lastCount;
+    @Column(columnDefinition = "location_code", nullable = false, name = "location_code")
+    private String locationCode;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "lot_number", nullable = false, name = "lot_number")
+    private String lotNumber;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "serial_number", nullable = false, name = "serial_number")
+    private String serialNumber;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "expiration_date", nullable = false, name = "expiration_date")
+    private Instant expirationDate;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "last_counted_date", nullable = false, name = "last_counted_date")
+    private Instant lastCountedDate;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "last_movement_date", nullable = false, name = "last_movement_date")
+    private Instant lastMovementDate;
+
+    @Getter
+    @Setter
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "created_at")
+    private Instant createdAt;
+
+    @Getter
+    @Setter
+    @UpdateTimestamp
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "updated_at")
+    private Instant updatedAt;
 
 }

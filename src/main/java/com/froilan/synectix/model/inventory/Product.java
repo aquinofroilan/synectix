@@ -1,6 +1,8 @@
 package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.Company;
+import com.froilan.synectix.model.User;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -199,12 +201,14 @@ public class Product {
 
     @Getter
     @Setter
-    @Column(nullable = false, name = "created_by", columnDefinition = "BIGINT")
-    private Long createdBy;
+    @OneToOne(mappedBy = "product", cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_user_uuid", referencedColumnName = "user_uuid", nullable = false)
+    private User createdBy;
 
     @Getter
     @Setter
-    @Column(nullable = false, name = "updated_by", columnDefinition = "BIGINT")
-    private Long updatedBy;
+    @OneToOne(mappedBy = "product", cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_user_uuid", referencedColumnName = "user_uuid", nullable = false)
+    private User updatedBy;
 
 }
