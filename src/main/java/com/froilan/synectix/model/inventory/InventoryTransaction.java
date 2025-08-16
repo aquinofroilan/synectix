@@ -22,6 +22,9 @@ import lombok.Setter;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity()
 @Table(name = "inventory_transaction", uniqueConstraints = @UniqueConstraint(columnNames = {"inventory_uuid",
     "warehouse_uuid",
@@ -42,40 +45,71 @@ public class InventoryTransaction {
 
     @Getter
     @Setter
-    @Column(columnDefinition = "transaction_type", nullable = false, name = "transaction_type", length = 50)
-    private String transactionType;
-
-    @Getter
-    @Setter
-    @OneToOne(mappedBy = "inventoryTransaction", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "inventory_transaction", cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fk_warehouse_uuid_source", referencedColumnName = "warehouse_uuid", nullable = false)
     private Warehouse warehouse;
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "inventoryTransaction", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "inventory_transaction", cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_product_uuid", referencedColumnName = "product_uuid", nullable = false)
+    private Product product;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "VARCHAR(100)", nullable = false, name = "transaction_type", length = 100)
+    private String transactionType;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "VARCHAR(100)", nullable = false, name = "transaction_reason", length = 100)
+    private String transactionReason;
+
+    @Getter
+    @Setter
+    @OneToOne(mappedBy = "inventory_transaction", cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fk_warehouse_uuid_destination", referencedColumnName = "warehouse_uuid", nullable = false)
     private Warehouse destinationWarehouse;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "quantity", nullable = false, name = "quantity", precision = 15, scale = 3)
+    @Column(columnDefinition = "DECIMAL", nullable = false, name = "quantity", precision = 15, scale = 3)
     private Float quantity;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "unit_cost", nullable = false, name = "unit_cost", precision = 15, scale = 2)
+    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "unit_cost", precision = 15, scale = 2)
     private Float unitCost;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "transaction_date", nullable = false, name = "transaction_date")
+    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "total_cost", precision = 15, scale = 2)
+    private Float totalCost;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "transaction_date")
     private Instant transactionDate;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "reference_number", name = "reference_number", length = 50)
+    @Column(columnDefinition = "VARCHAR(50)", name = "reference_type")
+    private String referenceType;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "VARCHAR(50)", name = "reference_id")
+    private String referenceId;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "VARCHAR(50)", name = "reference_number", length = 50)
     private String referenceNumber;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "running_balance", precision = 15, scale = 2)
+    private Float runningBalance;
 
     @Getter
     @Setter
@@ -85,7 +119,38 @@ public class InventoryTransaction {
 
     @Getter
     @Setter
-    @Column(columnDefinition = "notes", name = "notes")
+    @Column(columnDefinition = "VARCHAR(50)", name = "notes", length = 50)
     private String notes;
 
+    @Getter
+    @Setter
+    @Column(columnDefinition = "VARCHAR(50)", name = "lot_number")
+    private String lotNumber;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "VARCHAR(100)", name = "serialNumber", length = 100)
+    private String serialNumber;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "expiration_date")
+    private Instant expirationDate;
+
+    @Getter
+    @Setter
+    @Column(columnDefinition = "VARCHAR(50)", name = "location_code", length = 50)
+    private String locationCode;
+
+    @Getter
+    @Setter
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "created_at")
+    private Instant createdAt;
+
+    @Getter
+    @Setter
+    @UpdateTimestamp
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "updated_at")
+    private Instant updatedAt;
 }

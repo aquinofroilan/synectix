@@ -25,7 +25,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.froilan.synectix.model.Company;
 
 @Entity()
-@Table(name = "inventory_item", uniqueConstraints = @UniqueConstraint(columnNames = {"inventory_item_uuid", "warehouse_uuid", "product_uuid"}))
+@Table(name = "inventory_item", uniqueConstraints = @UniqueConstraint(columnNames = {"inventory_item_uuid", "warehouse_uuid", "product_uuid", "company_uuid", "lot_number", "serial_number"}))
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -56,32 +56,32 @@ public class InventoryItems {
 
     @Getter
     @Setter
-    @Column(columnDefinition = "quantity_on_hand", nullable = false, name = "quantity_on_hand", precision = 15, scale = 3)
+    @Column(nullable = false, name = "quantity_on_hand", columnDefinition = "DECIMAL(15,3)", precision = 15, scale = 3)
     private Float quantityOnHand;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "quantity_allocated", nullable = false, name = "quantity_allocated", precision = 15, scale = 3)
+    @Column(nullable = false, name = "quantity_allocated", columnDefinition = "DECIMAL(15,3)", precision = 15, scale = 3)
     private Float quantityAllocated;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "quantity_available", nullable = false, name = "quantity_available", precision = 15, scale = 3)
+    @Column(nullable = false, name = "quantity_available", columnDefinition = "DECIMAL(15,3)", precision = 15, scale = 3)
     private Float quantityAvailable;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "quantity_on_order", nullable = false, name = "quantity_on_order", precision = 15, scale = 3)
+    @Column(nullable = false, name = "quantity_on_order", columnDefinition = "DECIMAL(15,3)", precision = 15, scale = 3)
     private Float quantityOnOrder;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "average_cost", nullable = false, name = "average_cost", precision = 15, scale = 3)
+    @Column(nullable = false, name = "average_cost",columnDefinition = "DECIMAL(15,3)",  precision = 15, scale = 3)
     private Float averageCost;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "last_cost", nullable = false, name = "last_cost", precision = 15, scale = 3)
+    @Column(nullable = false, name = "last_cost", columnDefinition = "DECIMAL(15,3)", precision = 15, scale = 3)
     private Float lastCost;
 
     @Getter
