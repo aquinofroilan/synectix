@@ -48,8 +48,8 @@ public class User {
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID uuid;
+    @Column(columnDefinition = "user_uuid", updatable = false, nullable = false)
+    private UUID userUuid;
 
     /**
      * The username of the user.

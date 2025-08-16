@@ -19,12 +19,14 @@ import lombok.Setter;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.froilan.synectix.model.Company;
+
 @Entity()
-@Table(name = "inventory", uniqueConstraints = @UniqueConstraint(columnNames = {"inventory_uuid", "warehouse_uuid", "product_uuid"}))
+@Table(name = "inventory_item", uniqueConstraints = @UniqueConstraint(columnNames = {"inventory_item_uuid", "warehouse_uuid", "product_uuid"}))
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Inventory {
+public class InventoryItems {
 
     /**
      * Unique identifier for the inventory record.
@@ -34,14 +36,14 @@ public class Inventory {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "inventory_uuid", updatable = false, nullable = false)
-    private UUID inventoryUuid;
+    @Column(columnDefinition = "inventory_item_uuid", updatable = false, nullable = false)
+    private UUID inventoryItemUuid;
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "inventory", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_product_uuid", referencedColumnName = "warehouse_uuid", nullable = false)
-    private Product product;
+    @OneToOne(mappedBy = "warehouse", cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_company_uuid", referencedColumnName = "company_uuid", nullable = false)
+    private Company company;
 
     @Getter
     @Setter
