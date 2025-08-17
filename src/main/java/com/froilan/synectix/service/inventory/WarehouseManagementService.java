@@ -1,5 +1,6 @@
 package com.froilan.synectix.service.inventory;
 
+import com.froilan.synectix.exception.validation.NotFoundException;
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.inventory.WarehouseCreateBody;
@@ -10,6 +11,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+
+import java.util.UUID;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -44,5 +47,12 @@ public class WarehouseManagementService {
                 .updatedBy(creatorReference)
                 .build();
         return warehouseRepository.save(warehouse);
+    }
+
+    @Transactional
+    public void deleteWarehouse(String uuid) throws EntityNotFoundException {
+        Warehouse warehouse = warehouseRepository.findByWarehouseUuid(UUID.fromString(uuid))
+                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
+        warehouseRepository.delete(warehouse);
     }
 }

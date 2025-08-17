@@ -15,11 +15,13 @@ import lombok.NoArgsConstructor;
 public class ProductCategoryCreateBody {
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     @NotBlank(message = "Name cannot be blank")
-    private String name;
+    private String productCategoryName;
+
+    @Size(min = 3, max = 50, message = "Product category code must be between 3 and 50 characters")
+    @NotBlank(message = "Product category code cannot be blank")
+    private String productCategoryCode;
 
     @Size(max = 255, message = "Description must not exceed 255 characters")
     @NotBlank(message = "Description cannot be blank")
     private String description;
-
-    private String parentCategoryId;
 }

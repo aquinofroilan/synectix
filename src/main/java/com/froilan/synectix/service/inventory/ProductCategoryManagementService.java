@@ -1,8 +1,49 @@
 package com.froilan.synectix.service.inventory;
 
+import com.froilan.synectix.exception.validation.NotFoundException;
+import com.froilan.synectix.model.Company;
+import com.froilan.synectix.model.dto.request.inventory.ProductCategoryCreateBody;
+import com.froilan.synectix.model.inventory.ProductCategory;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+
+import com.froilan.synectix.repository.company.inventory.ProductCategoryRepository;
 
 @Service
 public class ProductCategoryManagementService {
+    @PersistenceContext
+    private EntityManager entityManager;
+    private final ProductCategoryRepository productCategoryRepository;
 
+    public ProductCategoryManagementService(ProductCategoryRepository productCategoryRepository) {
+        this.productCategoryRepository = productCategoryRepository;
+    }
+
+    @Transactional
+    public ProductCategory createProductCategory(ProductCategoryCreateBody newProductCategoryBody, String companyUuid)
+            throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
+        Company companyReference = entityManager.getReference(Company.class, companyUuid);
+        ProductCategory productCategory = ProductCategory.builder()
+                .productCategoryCode(newProductCategoryBody.getProductCategoryCode())
+                .productCategoryName(newProductCategoryBody.getProductCategoryName())
+                .description(newProductCategoryBody.getDescription())
+                .company(companyReference)
+                .build();
+        return productCategoryRepository.save(productCategory);
+    }
+
+    @Transactional
+    public void deleteProductCategory(Integer productCategoryId) throws NotFoundException {
+        ProductCategory productCategory = productCategoryRepository.findById(productCategoryId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("ProductCategory not found with ID: " + productCategoryId));
+        productCategoryRepository.delete(productCategory);
+    }
 }
