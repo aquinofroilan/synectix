@@ -2,18 +2,20 @@ package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,11 +23,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 
+@Builder
 @Entity()
 @Table(name = "warehouse", uniqueConstraints = @UniqueConstraint(columnNames = { "warehouse_uuid" }))
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Warehouse {
@@ -33,14 +36,23 @@ public class Warehouse {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "warehouse_uuid", updatable = false, nullable = false)
+    @Column(name = "warehouse_uuid", updatable = false, nullable = false)
     private UUID warehouseUuid;
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "warehouse", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_company_uuid", referencedColumnName = "company_uuid", nullable = false)
+    @OneToOne(cascade = CascadeType.PERSIST, mappedBy = "warehouse")
     private Company company;
+
+    @Getter
+    @Setter
+    @OneToOne(mappedBy = "warehouse", cascade = CascadeType.PERSIST)
+    private InventoryItem inventoryItem;
+
+    @Getter
+    @Setter
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "warehouse")
+    private Set<InventoryTransaction> inventoryTransactions;
 
     @Getter
     @Setter
@@ -114,13 +126,18 @@ public class Warehouse {
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "warehouse", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_user_uuid", referencedColumnName = "user_uuid", nullable = false)
+    @ManyToMany(mappedBy = "warehouse")
+    private Set<User> users;
+
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_user_uuid", referencedColumnName = "user_uuid")
     private User createdBy;
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "warehouse", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_user_uuid", referencedColumnName = "user_uuid", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by_user_uuid", referencedColumnName = "user_uuid")
     private User updatedBy;
 }

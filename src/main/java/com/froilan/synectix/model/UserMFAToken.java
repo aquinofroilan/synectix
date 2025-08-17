@@ -17,6 +17,6 @@ public class UserMFAToken {
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
 }

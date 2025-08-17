@@ -1,24 +1,32 @@
 package com.froilan.synectix.service.inventory;
 
+import com.froilan.synectix.config.security.jwt.JWTUtil;
 import com.froilan.synectix.model.dto.request.inventory.WarehouseCreateBody;
-import com.froilan.synectix.repository.company.inventory.WarehouseRepository;
+import com.froilan.synectix.model.inventory.Warehouse;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WarehouseManagementService {
-    private final WarehouseRepository warehouseRepository;
-    public WarehouseManagementService(WarehouseRepository warehouseRepository) {
-        this.warehouseRepository = warehouseRepository;
+    private final JWTUtil jwtUtil;
+
+    public WarehouseManagementService(JWTUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
     }
 
     public void createWarehouse(WarehouseCreateBody newWarehouse) {
-        // Logic to create a new warehouse
-        // This would typically involve saving the newWarehouse object to the database
-        // using the warehouseRepository.
-        WarehouseRepository warehouse = WarehouseRepository.builder()
+        Warehouse warehouse = Warehouse.builder()
                 .warehouseName(newWarehouse.getWarehouseName())
-                .location(newWarehouse.getLocation())
+                .addressLine1(newWarehouse.getAddressLine1())
+                .addressLine2(newWarehouse.getAddressLine2())
+                .city(newWarehouse.getCity())
+                .stateProvince(newWarehouse.getStateProvince())
+                .postalCode(newWarehouse.getPostalCode())
+                .warehouseType(newWarehouse.getWarehouseType())
+                .capacityLimit(newWarehouse.getCapacityLimit())
+                .capacityUnit(newWarehouse.getCapacityUnit())
                 .isActive(newWarehouse.isActive())
+//                .createdBy(jwtUtil.getUuidFromToken().toString())
+//                .updatedBy(jwtUtil.getUuidFromToken().toString())
                 .build();
     }
 }

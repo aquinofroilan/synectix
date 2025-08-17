@@ -1,15 +1,20 @@
 package com.froilan.synectix.model.lookup;
 
+import com.froilan.synectix.model.Company;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Entity
@@ -24,4 +29,9 @@ public class OrganizationType {
     @NotBlank(message = "Organization type name cannot be blank")
     @Size(max = 50, message = "Organization type name cannot exceed 50 characters")
     private String name;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "organizationType")
+    private Set<Company> companies;
 }

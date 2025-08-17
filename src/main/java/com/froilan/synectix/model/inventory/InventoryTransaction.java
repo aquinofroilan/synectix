@@ -1,34 +1,30 @@
 package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.User;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.UUID;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 @Entity()
-@Table(name = "inventory_transaction", uniqueConstraints = @UniqueConstraint(columnNames = {"inventory_uuid",
-    "warehouse_uuid",
-    "product_uuid"}))
+@Table(name = "inventory_transaction", uniqueConstraints = @UniqueConstraint(columnNames = {"inventory_transaction_uuid"}))
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,20 +36,8 @@ public class InventoryTransaction {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "inventory_transaction_uuid", updatable = false, nullable = false)
+    @Column(name = "inventory_transaction_uuid", updatable = false, nullable = false)
     private UUID inventoryTransactionUuid;
-
-    @Getter
-    @Setter
-    @OneToOne(mappedBy = "inventory_transaction", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_warehouse_uuid_source", referencedColumnName = "warehouse_uuid", nullable = false)
-    private Warehouse warehouse;
-
-    @Getter
-    @Setter
-    @OneToOne(mappedBy = "inventory_transaction", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_product_uuid", referencedColumnName = "product_uuid", nullable = false)
-    private Product product;
 
     @Getter
     @Setter
@@ -67,23 +51,23 @@ public class InventoryTransaction {
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "inventory_transaction", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_warehouse_uuid_destination", referencedColumnName = "warehouse_uuid", nullable = false)
-    private Warehouse destinationWarehouse;
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_warehouse_uuid", nullable = false)
+    private Warehouse warehouse;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "DECIMAL", nullable = false, name = "quantity", precision = 15, scale = 3)
+    @Column(columnDefinition = "DECIMAL", nullable = false, name = "quantity")
     private Float quantity;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "unit_cost", precision = 15, scale = 2)
+    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "unit_cost")
     private Float unitCost;
 
     @Getter
     @Setter
-    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "total_cost", precision = 15, scale = 2)
+    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "total_cost")
     private Float totalCost;
 
     @Getter
@@ -108,13 +92,13 @@ public class InventoryTransaction {
 
     @Getter
     @Setter
-    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "running_balance", precision = 15, scale = 2)
+    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "running_balance")
     private Float runningBalance;
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "inventoryTransaction", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_user_uuid", referencedColumnName = "user_uuid", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_user_uuid", nullable = false)
     private User user;
 
     @Getter
@@ -153,4 +137,5 @@ public class InventoryTransaction {
     @UpdateTimestamp
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "updated_at")
     private Instant updatedAt;
+
 }

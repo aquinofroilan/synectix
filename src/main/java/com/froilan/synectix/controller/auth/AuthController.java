@@ -1,9 +1,10 @@
 package com.froilan.synectix.controller.auth;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Map;
-
+import com.froilan.synectix.config.security.jwt.JWTUtil;
+import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
+import com.froilan.synectix.model.dto.request.authentication.SignInRequest;
+import com.froilan.synectix.service.auth.AuthenticationService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -17,12 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.froilan.synectix.config.security.jwt.JWTUtil;
-import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
-import com.froilan.synectix.model.dto.request.authentication.SignInRequest;
-import com.froilan.synectix.service.auth.AuthenticationService;
-
-import jakarta.validation.Valid;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -61,7 +59,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
         }
         String newAccessToken = jwtUtil.refreshToken(jwtUtil.getUsernameFromToken(refreshToken),
-                jwtUtil.getUuidFromToken(refreshToken));
+                jwtUtil.getUuidFromToken(refreshToken), jwtUtil.getCompanyUuidFromToken(refreshToken));
         return ResponseEntity.ok(Map.of("access_token", newAccessToken));
     }
 

@@ -1,10 +1,5 @@
 package com.froilan.synectix.config.security.jwt;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -12,6 +7,10 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class JWTUtil {
@@ -21,12 +20,13 @@ public class JWTUtil {
         this.algorithm = algorithm;
     }
 
-    public String generateToken(String username, String uuidString, List<String> permissions)
+    public String generateToken(String username, String uuidString, String companyUuid, List<String> permissions)
             throws IllegalArgumentException, JWTCreationException {
         try {
             return JWT.create()
                     .withSubject(uuidString)
                     .withClaim("username", username)
+                    .withClaim("companyUuid", companyUuid)
                     .withArrayClaim("permissions", permissions.toArray(new String[0]))
                     .withIssuedAt(new Date())
                     .withExpiresAt(new Date(System.currentTimeMillis() + 3600000))
@@ -71,6 +71,18 @@ public class JWTUtil {
         }
     }
 
+    public String getCompanyUuidFromToken(String token) {
+        try {
+            JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("auth0")
+                .build();
+            DecodedJWT jwt = verifier.verify(token);
+            return jwt.getClaim("companyUuid").asString();
+        } catch (JWTVerificationException e) {
+            throw new RuntimeException("Invalid token", e);
+        }
+    }
+
     public boolean isValid(String token) {
         try {
             validateTokenAndRetrieveSubject(token);
@@ -80,10 +92,11 @@ public class JWTUtil {
         }
     }
 
-    public String refreshToken(String username, String uuidString) {
+    public String refreshToken(String username, String uuidString, String companyUuid) {
         return JWT.create()
                 .withSubject(uuidString)
                 .withClaim("username", username)
+                .withClaim("companyUuid", companyUuid)
                 .withIssuedAt(new Date())
                 .withIssuer("auth0")
                 .sign(algorithm);

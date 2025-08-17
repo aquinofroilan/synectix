@@ -1,12 +1,6 @@
 package com.froilan.synectix.model.inventory;
 
-import java.time.Instant;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import com.froilan.synectix.model.Company;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,19 +8,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Entity()
-@Table(name = "product_category", uniqueConstraints = @UniqueConstraint(columnNames = { "uuid", "registration_number",
-    "tax_number" }))
+@Table(name = "product_category", uniqueConstraints = @UniqueConstraint(columnNames = { "product_category_id" }))
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,25 +30,18 @@ public class ProductCategory {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(columnDefinition = "product_category_id", updatable = false, nullable = false)
+    @Column(name = "product_category_id", updatable = false, nullable = false)
     private Integer productCategoryId;
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "product_category", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_company_uuid", referencedColumnName = "company_uuid", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_company_uuid", nullable = false)
     private Company company;
 
     @Getter
     @Setter
-    @OneToOne(mappedBy = "product_category", cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_parent_category_id", referencedColumnName = "product_category_id", nullable = true)
-    private ProductCategory parentCategoryId;
-
-    @Getter
-    @Setter
-    @Column(nullable = false, unique = true, name = "product_category_name", length = 50, columnDefinition = "VARCHAR" +
-        "(50)")
+    @Column(nullable = false, unique = true, name = "product_category_name", length = 50, columnDefinition = "VARCHAR(50)")
     private String productCategoryName;
 
     @Getter
