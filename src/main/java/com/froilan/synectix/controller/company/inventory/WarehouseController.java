@@ -1,7 +1,9 @@
 package com.froilan.synectix.controller.company.inventory;
 
 import com.froilan.synectix.model.dto.request.inventory.WarehouseCreateBody;
+
 import jakarta.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @RequestMapping("/api/company/inventory/warehouse")
 public class WarehouseController {
     private static final Logger logger = LoggerFactory.getLogger(WarehouseController.class);

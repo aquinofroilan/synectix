@@ -7,13 +7,15 @@ import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.froilan.synectix.exception.authentication.ConflictException;
 import com.froilan.synectix.exception.authentication.PasswordMismatchException;
 import com.froilan.synectix.exception.authentication.UserNotFoundException;
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.company.NewCompanyUserRequest;
 import com.froilan.synectix.repository.user.UserRepository;
-import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class UserManagementService {
