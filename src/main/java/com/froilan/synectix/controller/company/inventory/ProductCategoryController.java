@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.froilan.synectix.config.security.jwt.JWTClaims;
 import com.froilan.synectix.model.dto.request.inventory.ProductCategoryCreateBody;
+import com.froilan.synectix.service.inventory.ProductCategoryManagementService;
 
 import jakarta.validation.Valid;
 
@@ -21,12 +23,23 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/company/inventory/product-categories")
 public class ProductCategoryController {
     private static final Logger logger = LoggerFactory.getLogger(ProductCategoryController.class);
+    private final ProductCategoryManagementService productCategoryManagementService;
+    private final JWTClaims jwtClaims;
+
+    public ProductCategoryController(ProductCategoryManagementService productCategoryManagementService, JWTClaims jwtClaims) {
+        this.productCategoryManagementService = productCategoryManagementService;
+        this.jwtClaims = jwtClaims;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public String createProductCategory(@Valid @RequestBody ProductCategoryCreateBody request) {
         logger.info("Creating a new product category");
-        // Logic to create
+        String userUuid = jwtClaims.getCurrentUserUuid();
+        String username = jwtClaims.getCurrentUsername();
+        String companyUuid = jwtClaims.getCurrentCompanyUuid();
+        logger.info("User {} (ID: {}) from company {} is creating a product category", username, userUuid, companyUuid);
+        productCategoryManagementService.createProductCategory(request, companyUuid);
         return "Product category created successfully";
     }
 
@@ -41,10 +54,7 @@ public class ProductCategoryController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProductCategory(@PathVariable String id) {
-        if (id == null || id.isBlank()) {
-            logger.error("Invalid ID provided for deletion");
-            throw new IllegalArgumentException("Invalid ID provided for deletion");
-        }
+        this.productCategoryManagementService.deleteProductCategory(id);
         logger.info("Deleting product category with ID: {}", id);
         // Logic to delete
     }

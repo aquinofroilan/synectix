@@ -40,10 +40,10 @@ public class ProductCategoryManagementService {
     }
 
     @Transactional
-    public void deleteProductCategory(Integer productCategoryId) throws NotFoundException {
-        ProductCategory productCategory = productCategoryRepository.findById(productCategoryId)
+    public void deleteProductCategory(String id) throws NotFoundException {
+        ProductCategory productCategory = productCategoryRepository.findById(id)
                 .orElseThrow(
-                        () -> new EntityNotFoundException("ProductCategory not found with ID: " + productCategoryId));
+                        () -> new EntityNotFoundException("ProductCategory not found with ID: " + id));
         productCategoryRepository.delete(productCategory);
     }
 }
