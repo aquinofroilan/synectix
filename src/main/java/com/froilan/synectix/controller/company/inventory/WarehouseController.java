@@ -55,9 +55,9 @@ public class WarehouseController {
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{uuid}")
-    public String deleteWarehouse() {
-        logger.info("Deleting a warehouse");
-        // Logic to delete a warehouse
+    public String deleteWarehouse(@PathVariable("uuid") String uuid) {
+        logger.info("Deleting a warehouse with UUID: {}", uuid);
+        warehouseManagementService.deleteWarehouse(uuid);
         return "Warehouse deleted successfully";
     }
 
