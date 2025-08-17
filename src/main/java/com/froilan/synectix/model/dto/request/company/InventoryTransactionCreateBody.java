@@ -56,7 +56,7 @@ public class InventoryTransactionCreateBody {
     private String transactionReason;
 
     @NotBlank(message = "Quantity cannot be blank")
-    private String quantity;
+    private Float quantity;
 
     @NotBlank(message = "Unit costs cannot be blank")
     private Float unitCosts;
