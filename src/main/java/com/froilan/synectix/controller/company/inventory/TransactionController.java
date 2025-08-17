@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 import com.froilan.synectix.model.dto.request.company.InventoryTransactionCreateBody;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/company/inventory/transaction")
@@ -19,7 +20,7 @@ public class TransactionController {
     private static final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PostMapping("/create")
+    @PostMapping
     public String createTransaction(@Valid @RequestBody InventoryTransactionCreateBody transactionCreateBody) {
         logger.info("Creating a new transaction");
         // Logic to create a new transaction

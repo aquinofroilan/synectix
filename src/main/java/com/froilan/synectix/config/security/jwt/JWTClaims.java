@@ -14,6 +14,10 @@ public class JWTClaims {
         return getClaimFromCurrentJwt("sub");
     }
 
+    public String getCurrentUserUuid() {
+        return getClaimFromCurrentJwt("userUuid");
+    }
+
     public String getCurrentUsername() {
         return getClaimFromCurrentJwt("username");
     }

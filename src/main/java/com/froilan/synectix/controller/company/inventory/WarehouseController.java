@@ -1,6 +1,9 @@
 package com.froilan.synectix.controller.company.inventory;
 
+import com.froilan.synectix.config.security.jwt.JWTClaims;
 import com.froilan.synectix.model.dto.request.inventory.WarehouseCreateBody;
+import com.froilan.synectix.model.inventory.Warehouse;
+import com.froilan.synectix.service.inventory.WarehouseManagementService;
 
 import jakarta.validation.Valid;
 
@@ -23,13 +26,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/company/inventory/warehouse")
 public class WarehouseController {
     private static final Logger logger = LoggerFactory.getLogger(WarehouseController.class);
+    private final WarehouseManagementService warehouseManagementService;
+    private final JWTClaims jwtClaims;
+
+    public WarehouseController(WarehouseManagementService warehouseManagementService, JWTClaims jwtClaims) {
+        this.warehouseManagementService = warehouseManagementService;
+        this.jwtClaims = jwtClaims;
+    }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping
-    public String createWarehouse(@Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
+    public  Warehouse createWarehouse(@Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
         logger.info("Creating a new warehouse");
-        // Logic to create a new warehouse
-        return "Warehouse created successfully";
+        String userUuid = jwtClaims.getCurrentUserUuid();
+        String username = jwtClaims.getCurrentUsername();
+        String companyUuid = jwtClaims.getCurrentCompanyUuid();
+        logger.info("User {} (ID: {}) from company {} is creating a warehouse", username, userUuid, companyUuid);
+        return warehouseManagementService.createWarehouse(warehouseCreateBody, userUuid, companyUuid);
     }
 
     @ResponseStatus(HttpStatus.OK)

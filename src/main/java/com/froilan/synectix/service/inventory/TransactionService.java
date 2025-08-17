@@ -41,6 +41,7 @@ public class TransactionService {
         inventoryItem.setLastMovementDate(createBody.getLastMovementDate());
         transaction.setTransactionType(createBody.getTransactionType());
         transaction.setTransactionReason(createBody.getTransactionReason());
+
         transaction.setQuantity(createBody.getQuantity());
         transaction.setUnitCost(createBody.getUnitCosts());
         transaction.setTotalCost(createBody.getTotalCosts());
