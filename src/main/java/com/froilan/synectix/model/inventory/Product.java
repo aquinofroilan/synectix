@@ -1,6 +1,11 @@
 package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.User;
+import com.froilan.synectix.model.enums.product.DimensionUnit;
+import com.froilan.synectix.model.enums.product.ProductType;
+import com.froilan.synectix.model.enums.product.UnitMeasure;
+import com.froilan.synectix.model.enums.product.WeightUnit;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,60 +17,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.UUID;
-
-// TODO: Consider separating these enums into their own files for better organization
-enum DimensionUnit {
-    CM,
-    INCH,
-    METER,
-    FOOT,
-    YARD,
-    MILLIMETER,
-    KILOMETER,
-    MILE
-}
-
-enum ProductType {
-    GOODS,
-    SERVICES,
-    DIGITAL,
-    SUBSCRIPTION,
-    BUNDLE,
-    OTHER
-}
-
-enum UnitMeasure {
-    PIECE,
-    KILOGRAM,
-    GRAM,
-    LITER,
-    MILLILITER,
-    BOX,
-    PACK,
-    DOZEN,
-    SET,
-    PAIR
-}
-
-enum WeightUnit {
-    KG,
-    LB,
-    G,
-    OZ
-}
-
 
 @Entity
 @Builder
