@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import com.froilan.synectix.repository.company.inventory.ProductCategoryRepository;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class ProductCategoryManagementService {
     @PersistenceContext
@@ -27,7 +30,7 @@ public class ProductCategoryManagementService {
     }
 
     @Transactional
-    public ProductCategory createProductCategory(ProductCategoryCreateBody newProductCategoryBody, String companyUuid)
+    public void createProductCategory(ProductCategoryCreateBody newProductCategoryBody, String companyUuid)
             throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
         Company companyReference = entityManager.getReference(Company.class, companyUuid);
         ProductCategory productCategory = ProductCategory.builder()
@@ -36,14 +39,25 @@ public class ProductCategoryManagementService {
                 .description(newProductCategoryBody.getDescription())
                 .company(companyReference)
                 .build();
-        return productCategoryRepository.save(productCategory);
+        productCategoryRepository.save(productCategory);
     }
 
     @Transactional
-    public void deleteProductCategory(String id) throws NotFoundException {
+    public void deleteProductCategory(Integer id) throws NotFoundException {
         ProductCategory productCategory = productCategoryRepository.findById(id)
                 .orElseThrow(
                         () -> new EntityNotFoundException("ProductCategory not found with ID: " + id));
         productCategoryRepository.delete(productCategory);
+    }
+
+    public List<ProductCategory>  getProductCategories(String companyUuid) {
+        // This method can be implemented to retrieve all product categories associated with a company.
+        // For now, it is left empty as per the original code structure
+        return productCategoryRepository.findAllByCompanyUuid(UUID.fromString(companyUuid));
+    }
+
+    public ProductCategory getProductCategory(Integer id) throws NotFoundException {
+        return productCategoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("ProductCategory not found with ID: " + id));
     }
 }

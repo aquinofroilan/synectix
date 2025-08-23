@@ -1,9 +1,11 @@
 package com.froilan.synectix.repository.company.inventory;
 
+import com.froilan.synectix.model.inventory.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.froilan.synectix.model.inventory.ProductCategory;
+import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Integer> {
@@ -23,4 +25,11 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
      * @return true if a product category with the given name exists, false otherwise
      */
     boolean existsByProductCategoryName(String productCategoryName);
+
+    /**
+     * Get all product categories associated with a specific company.
+     * @param companyUuid the UUID of the company
+     * @return a list of product categories associated with the company
+     */
+     List<ProductCategory> findAllByCompanyUuid(UUID companyUuid);
 }

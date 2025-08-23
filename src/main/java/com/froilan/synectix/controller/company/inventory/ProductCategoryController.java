@@ -1,5 +1,6 @@
 package com.froilan.synectix.controller.company.inventory;
 
+import com.froilan.synectix.model.inventory.ProductCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import com.froilan.synectix.model.dto.request.inventory.ProductCategoryCreateBod
 import com.froilan.synectix.service.inventory.ProductCategoryManagementService;
 
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/company/inventory/product-categories")
@@ -54,17 +57,16 @@ public class ProductCategoryController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProductCategory(@PathVariable String id) {
-        this.productCategoryManagementService.deleteProductCategory(id);
+        productCategoryManagementService.deleteProductCategory(Integer.valueOf(id));
         logger.info("Deleting product category with ID: {}", id);
-        // Logic to delete
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public String listProductCategories() {
+    public List<ProductCategory> listProductCategories(@RequestBody (required = true) String companyUuid) {
         logger.info("Listing all product categories");
         // Logic to list
-        return "List of product categories";
+        return productCategoryManagementService.getProductCategories(companyUuid);
     }
 
     @GetMapping("/{id}")
