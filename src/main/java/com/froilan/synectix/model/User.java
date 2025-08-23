@@ -1,6 +1,7 @@
 package com.froilan.synectix.model;
 
 import com.froilan.synectix.model.inventory.InventoryTransaction;
+import com.froilan.synectix.model.inventory.Product;
 import com.froilan.synectix.model.inventory.Warehouse;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -202,4 +203,9 @@ public class User {
     @Setter
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<InventoryTransaction> inventoryTransactions;
+
+    @Getter
+    @Setter
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Product> products;
 }

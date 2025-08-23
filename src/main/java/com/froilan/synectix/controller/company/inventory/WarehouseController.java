@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/company/inventory/warehouse")
+
 public class WarehouseController {
     private static final Logger logger = LoggerFactory.getLogger(WarehouseController.class);
     private final WarehouseManagementService warehouseManagementService;
