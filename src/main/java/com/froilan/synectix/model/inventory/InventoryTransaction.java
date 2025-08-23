@@ -1,6 +1,7 @@
 package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.User;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,11 +13,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -29,10 +32,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InventoryTransaction {
-
-    // Unique identifier for the inventory transaction record.
-    // This is a UUID that is generated automatically.
-    // It is used to uniquely identify each inventory transaction record in the database.
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
