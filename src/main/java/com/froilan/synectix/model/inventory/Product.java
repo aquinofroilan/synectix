@@ -55,161 +55,273 @@ public class Product {
     @JoinColumn(name = "fk_product_category_id", nullable = true)
     private ProductCategory productCategory;
 
+    /**
+     * The SKU (Stock Keeping Unit) of the product.
+     * This variable is used to uniquely identify the product in the inventory system.
+     */
     @Getter
     @Setter
     @Column(nullable = false, unique = true, name = "sku", length = 100)
     private String sku;
 
+    /**
+     * The name of the product.
+     * This variable is used to display the product's name in the application.
+     */
     @Getter
     @Setter
     @Column(nullable = false, name = "product_name", length = 100)
     private String productName;
 
+    /**
+     * The description of the product.
+     * This variable is used to provide additional information about the product.
+     */
     @Setter
     @Getter
     @Column(nullable = false, name = "product_description" )
     private String productDescription;
 
+    /**
+     * The brand of the product.
+     * This variable is used to display the product's brand in the application.
+     */
     @Setter
     @Getter
     @Column(nullable = false, name = "brand", length = 100)
     private String brand;
 
+    /**
+     * The model of the product.
+     * This variable is used to display the product's model in the application.
+     */
     @Setter
     @Getter
     @Column(nullable = false, name = "model", length = 100)
     private String model;
 
+    /**
+     * The type of the product.
+     * This variable is used to categorize the product in the inventory system.
+     */
     @Setter
     @Getter
     @Column(nullable = false, name = "product_type")
     @Enumerated(EnumType.STRING)
     private ProductType productType;
 
+    /**
+     * The unit of measure for the product.
+     * This variable is used to define how the product is measured (e.g., pieces, kilograms, liters).
+     */
     @Setter
     @Getter
     @Column(nullable = false, name = "unit_measure")
     @Enumerated(EnumType.STRING)
     private UnitMeasure unitMeasure;
 
+    /**
+     * The base cost of the product.
+     * This variable is used to store the cost price of the product in the inventory system.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "base_cost", columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
     private Float baseCost = 0f;
 
+    /**
+     * The selling price of the product.
+     * This variable is used to store the retail price of the product in the inventory system.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "selling_price", columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
     private Float sellingPrice = 0f;
 
+    /**
+     * The weight of the product.
+     * This variable is used to store the weight of the product for shipping and handling purposes.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "weight", columnDefinition = "DECIMAL(10,3) DEFAULT 0.000")
     private Float weight = 0f;
 
+    /**
+     * The unit of weight for the product.
+     * This variable is used to define the unit of measurement for the product's weight (e.g., kg, lb).
+     */
     @Getter
     @Setter
     @Column(nullable = false, name = "weight_unit")
     @Enumerated(EnumType.STRING)
     private WeightUnit weightUnit;
 
+    /**
+     * The dimensions of the product (length, width, height).
+     * These variables are used to store the physical dimensions of the product for storage and shipping purposes.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "dimensions_length", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
     private Float dimensionsLength = 0f;
 
+    /**
+     * The width of the product.
+     * This variable is used to store the width dimension of the product.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "dimensions_width", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
     private Float dimensionsWidth = 0f;
 
+    /**
+     * The height of the product.
+     * This variable is used to store the height dimension of the product.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "dimensions_height", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
     private Float dimensionsHeight = 0f;
 
+    /**
+     * The unit of measurement for the product's dimensions.
+     * This variable is used to define the unit of measurement for the product's dimensions (e.g., cm, in).
+     */
     @Setter
     @Getter
     @Column(nullable = false, name = "dimension_unit")
     @Enumerated(EnumType.STRING)
     private DimensionUnit dimensionUnit;
 
+    /**
+     * The barcode of the product.
+     * This variable is used to store the barcode value for scanning and identification purposes.
+     */
     @Setter
     @Getter
     @Column(nullable = false, name = "barcode")
     private String barcode;
 
+    /**
+     * The QR code of the product.
+     * This variable is used to store the QR code value for scanning and identification purposes.
+     */
     @Setter
     @Getter
     @Column(nullable = false, name = "qr_code")
     private String qrCode;
 
+    /**
+     * The minimum stock level for the product.
+     * This variable is used to trigger reordering when the stock level falls below this threshold.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "minimum_stock_level", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
     private Float minimumStockLevel = 0f;
 
+    /**
+     * The reorder point for the product.
+     * This variable is used to determine when to reorder the product based on current stock levels.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "reorder_point", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
     private Float reorderPoint = 0f;
 
+    /**
+     * The reorder quantity for the product.
+     * This variable is used to specify the quantity to reorder when the stock level reaches the reorder point.
+     */
     @Getter
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "reorder_quantity", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
     private Float reorderQuantity = 0f;
 
+    /**
+     * Indicates whether the product is deleted.
+     * This variable is used to display the product's deletion status in the application.
+     */
     @Setter
     @Getter
     @Builder.Default
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean isActive = true;
 
+    /**
+     * Indicates whether the product is deleted.
+     * This variable is used to display the product's deletion status in the application.
+     */
     @Setter
     @Getter
     @Builder.Default
     @Column(nullable = false, name = "is_serialized", columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean isSerialized = false;
 
+    /**
+     * Indicates whether the product is lot tracked.
+     * This variable is used to display the product's lot tracking status in the application.
+     */
     @Setter
     @Getter
     @Builder.Default
     @Column(nullable = false, name = "is_lot_tracked", columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean isLotTracked = false;
 
+    /**
+     * Indicates whether the product has expiration tracking.
+     * This variable is used to display the product's expiration tracking status in the application.
+     */
     @Setter
     @Getter
     @Builder.Default
     @Column(nullable = false, name = "expiration_tracking", columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean expirationTracking = false;
 
+    /**
+     * The user who created the product.
+     * This variable is used to track which user created the product in the system.
+     */
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "fk_user_uuid_created_by", nullable = false)
     private User createdBy;
 
+    /**
+     * The user who last updated the product.
+     * This variable is used to track which user last updated the product in the system.
+     */
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "fk_user_uuid_updated_by", nullable = false)
     private User updatedBy;
 
+    /**
+     * The timestamp when the product was created.
+     * This variable is used to display the product's creation time in the application.
+     */
     @Getter
     @Setter
     @CreationTimestamp
     @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Instant createdAt;
 
+    /**
+     * The timestamp when the product was last updated.
+     * This variable is used to display the product's last update time in the application.
+     */
     @Getter
     @Setter
     @UpdateTimestamp

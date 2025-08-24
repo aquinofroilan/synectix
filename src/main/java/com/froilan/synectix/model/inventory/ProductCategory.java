@@ -30,6 +30,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCategory {
+
+    /**
+     * The ID of the product category.
+     * This variable is used to display the product category's ID in the application.
+     */
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -46,27 +51,47 @@ public class ProductCategory {
     @OneToMany(mappedBy = "productCategory", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<Product> products;
 
+    /**
+     * The name of the product category.
+     * This variable is used to display the product category's name in the application.
+     */
     @Getter
     @Setter
     @Column(nullable = false, unique = true, name = "product_category_name", length = 50, columnDefinition = "VARCHAR(50)")
     private String productCategoryName;
 
+    /**
+     * The code of the product category.
+     * This variable is used to display the product category's code in the application.
+     */
     @Getter
     @Setter
     @Column(nullable = false, name = "productCategoryCode", length = 50, columnDefinition = "VARCHAR(50)")
     private String productCategoryCode;
 
+    /**
+     * The description of the product category.
+     * This variable is used to display the product category's description in the application.
+     */
     @Getter
     @Setter
     @Column(nullable = false, name = "description", columnDefinition = "VARCHAR(255)")
     private String description;
 
+    /**
+     * Timestamp when the product category was created.
+     * This variable is used to display the creation time of the product category in the application.
+     */
     @Getter
     @Setter
     @CreationTimestamp
     @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Instant createdAt;
 
+    /**
+     * Timestamp when the product category was last updated.
+     * This variable is used to display the last update time of the product category in the application.
+     */
     @Getter
     @Setter
     @UpdateTimestamp
