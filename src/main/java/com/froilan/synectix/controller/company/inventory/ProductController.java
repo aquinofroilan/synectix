@@ -10,9 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.froilan.synectix.config.security.jwt.JWTClaims;
+import com.froilan.synectix.model.dto.request.inventory.ProductCreateBody;
+import com.froilan.synectix.service.inventory.ProductService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/company/inventory/product")
@@ -20,11 +27,19 @@ public class ProductController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
+    private final ProductService productService;
+    private final JWTClaims jwtClaims;
+
+    public ProductController(ProductService productService, JWTClaims jwtClaims) {
+        this.productService = productService;
+        this.jwtClaims = jwtClaims;
+    }
+
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping
-    public String createProduct() {
+    public String createProduct(@Valid @RequestBody ProductCreateBody productCreateBody) {
         logger.info("Creating a new product");
-        // Logic to create a new product
+        this.productService.createProduct(productCreateBody);
         return "Product created successfully";
     }
 

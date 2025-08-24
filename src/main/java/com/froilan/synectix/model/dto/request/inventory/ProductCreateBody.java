@@ -1,5 +1,9 @@
 package com.froilan.synectix.model.dto.request.inventory;
 
+import com.froilan.synectix.model.enums.product.DimensionUnit;
+import com.froilan.synectix.model.enums.product.ProductType;
+import com.froilan.synectix.model.enums.product.UnitMeasure;
+import com.froilan.synectix.model.enums.product.WeightUnit;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -23,18 +27,71 @@ public class ProductCreateBody {
 
     @NotBlank(message = "Description cannot be blank")
     @Size(max = 255, message = "Description must not exceed 255 characters")
-    private String description;
+    private String productDescription;
 
 
     @NotBlank(message = "Product category ID cannot be blank")
-    private String productCategoryId; // Assuming this is the ID of the ProductCategory
+    private Integer productCategoryId;
 
-    @NotBlank(message = "Warehouse ID cannot be blank")
-    private String warehouseId; // Assuming this is the ID of the Warehouse
+    @NotBlank(message = "Brand cannot be blank")
+    @Size(max = 100, message = "Brand must not exceed 100 characters")
+    private String brand;
+
+    @NotBlank(message = "Model cannot be blank")
+    @Size(max = 100, message = "Model must not exceed 100 characters")
+    private String model;
+
+    @NotBlank(message = "Unit measure cannot be blank")
+    private ProductType productType;
+
+    @NotBlank(message = "Unit measure cannot be blank")
+    private UnitMeasure unitMeasure;
+
+    private Float baseCost;
+
+    private Float sellingPrice;
+
+    private Float weight;
+
+    @NotBlank(message = "Weight unit cannot be blank")
+    private WeightUnit weightUnit;
+
+    private Float dimensionsLength;
+
+    private Float dimensionsWidth;
+
+    private Float dimensionsHeight;
+
+    @NotBlank(message = "Dimension unit cannot be blank")
+    private DimensionUnit dimensionUnit;
+
+    @NotBlank(message = "Barcode cannot be blank")
+    private String barcode;
+
+    @NotBlank(message = "QR code cannot be blank")
+    private String qrCode;
 
     @Builder.Default
-    private boolean isActive = true; // Default to active if not specified
+    private Float minimumStockLevel = 0.0f;
 
     @Builder.Default
-    private boolean isDeleted = false; // Default to not deleted if not specified
+    private Float reorderPoint = 0.0f;
+
+    @Builder.Default
+    private Float reorderQuantity = 0.0f;
+
+    @Builder.Default
+    private boolean isActive = true;
+
+    @Builder.Default
+    private boolean isSerialized = false;
+
+    @Builder.Default
+    private boolean isLotTracked = false;
+
+    @Builder.Default
+    private boolean expirationTracking = false;
+
+    @Builder.Default
+    private boolean isDeleted = false;
 }

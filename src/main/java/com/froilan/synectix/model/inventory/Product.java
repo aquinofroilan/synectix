@@ -17,11 +17,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -79,16 +81,19 @@ public class Product {
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "base_cost", columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
     private Float baseCost = 0f;
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "selling_price", columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
     private Float sellingPrice = 0f;
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "weight", columnDefinition = "DECIMAL(10,3) DEFAULT 0.000")
     private Float weight = 0f;
 
@@ -100,16 +105,19 @@ public class Product {
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "dimensions_length", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
     private Float dimensionsLength = 0f;
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "dimensions_width", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
     private Float dimensionsWidth = 0f;
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "dimensions_height", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
     private Float dimensionsHeight = 0f;
 
@@ -131,37 +139,43 @@ public class Product {
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "minimum_stock_level", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
     private Float minimumStockLevel = 0f;
 
     @Getter
     @Setter
-    @Column
-    (nullable = false, name = "reorder_point", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
+    @Builder.Default
+    @Column(nullable = false, name = "reorder_point", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
     private Float reorderPoint = 0f;
 
     @Getter
     @Setter
+    @Builder.Default
     @Column(nullable = false, name = "reorder_quantity", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
     private Float reorderQuantity = 0f;
 
     @Setter
     @Getter
+    @Builder.Default
     @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean isActive = true;
 
     @Setter
     @Getter
+    @Builder.Default
     @Column(nullable = false, name = "is_serialized", columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean isSerialized = false;
 
     @Setter
     @Getter
+    @Builder.Default
     @Column(nullable = false, name = "is_lot_tracked", columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean isLotTracked = false;
 
     @Setter
     @Getter
+    @Builder.Default
     @Column(nullable = false, name = "expiration_tracking", columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean expirationTracking = false;
 

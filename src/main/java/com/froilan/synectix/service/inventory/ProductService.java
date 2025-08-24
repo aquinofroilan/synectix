@@ -1,10 +1,14 @@
 package com.froilan.synectix.service.inventory;
 
 import com.froilan.synectix.exception.validation.NotFoundException;
+import com.froilan.synectix.model.dto.request.inventory.ProductCreateBody;
 import com.froilan.synectix.model.inventory.Product;
 import com.froilan.synectix.repository.company.inventory.ProductRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +24,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public void createProduct() {
+    @Transactional
+    public void createProduct(ProductCreateBody newProduct) throws IllegalArgumentException, OptimisticLockingFailureException {
         // Implementation for creating a product goes here
     }
 
