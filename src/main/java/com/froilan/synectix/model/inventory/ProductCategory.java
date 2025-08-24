@@ -4,11 +4,13 @@ import com.froilan.synectix.model.Company;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Entity()
 @Table(name = "product_category", uniqueConstraints = @UniqueConstraint(columnNames = { "product_category_id" }))
@@ -38,6 +41,10 @@ public class ProductCategory {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fk_company_uuid", nullable = false)
     private Company company;
+
+    @Getter
+    @OneToMany(mappedBy = "productCategory", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Product> products;
 
     @Getter
     @Setter

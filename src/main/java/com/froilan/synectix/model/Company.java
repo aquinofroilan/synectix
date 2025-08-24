@@ -1,6 +1,7 @@
 package com.froilan.synectix.model;
 
 import com.froilan.synectix.model.inventory.InventoryItem;
+import com.froilan.synectix.model.inventory.Product;
 import com.froilan.synectix.model.inventory.ProductCategory;
 import com.froilan.synectix.model.inventory.Warehouse;
 import com.froilan.synectix.model.lookup.Country;
@@ -122,4 +123,9 @@ public class Company {
     @Setter
     @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
     private Set<InventoryItem> inventoryItems;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
+    private Set<Product> products;
 }

@@ -1,5 +1,6 @@
 package com.froilan.synectix.model.inventory;
 
+import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.enums.product.DimensionUnit;
 import com.froilan.synectix.model.enums.product.ProductType;
@@ -10,6 +11,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,28 +45,39 @@ public class Product {
     private UUID productUuid;
 
     @Getter
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_company_uuid", nullable = false)
+    private Company company;
+
+    @Getter
     @Setter
-    @Column(nullable = false, unique = true, name = "sku", length = 100, columnDefinition = "VARCHAR(100)")
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "fk_product_category_id", nullable = true)
+    private ProductCategory productCategory;
+
+    @Getter
+    @Setter
+    @Column(nullable = false, unique = true, name = "sku", length = 100)
     private String sku;
 
     @Getter
     @Setter
-    @Column(nullable = false, name = "product_name", length = 100, columnDefinition = "VARCHAR(100)")
+    @Column(nullable = false, name = "product_name", length = 100)
     private String productName;
 
     @Setter
     @Getter
-    @Column(nullable = false, name = "product_description", columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, name = "product_description" )
     private String productDescription;
 
     @Setter
     @Getter
-    @Column(nullable = false, name = "brand", columnDefinition = "VARCHAR(100)")
+    @Column(nullable = false, name = "brand", length = 100)
     private String brand;
 
     @Setter
     @Getter
-    @Column(nullable = false, name = "model", columnDefinition = "VARCHAR(100)")
+    @Column(nullable = false, name = "model", length = 100)
     private String model;
 
     @Setter
@@ -129,12 +142,12 @@ public class Product {
 
     @Setter
     @Getter
-    @Column(nullable = false, name = "barcode", columnDefinition = "VARCHAR(255")
+    @Column(nullable = false, name = "barcode")
     private String barcode;
 
     @Setter
     @Getter
-    @Column(nullable = false, name = "qr_code", columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, name = "qr_code")
     private String qrCode;
 
     @Getter
