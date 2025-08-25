@@ -2,10 +2,14 @@ package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
-
+import com.froilan.synectix.model.enums.product.CapacityUnit;
+import com.froilan.synectix.model.enums.product.WarehouseType;
+import com.froilan.synectix.model.lookup.Country;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +21,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -128,6 +131,12 @@ public class Warehouse {
     @Column(nullable = false, name = "postal_code", length = 20)
     private String postalCode;
 
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "country_id", nullable = false)
+    private Country country;
+
     /**
      * The country of the warehouse.
      * This variable is used to display the warehouse's country in the application.
@@ -135,7 +144,8 @@ public class Warehouse {
     @Getter
     @Setter
     @Column(nullable = false, name = "warehouse_type", length = 50)
-    private String warehouseType;
+    @Enumerated(EnumType.ORDINAL)
+    private WarehouseType warehouseType;
 
     /**
      * Indicates whether the warehouse is active.
@@ -162,7 +172,8 @@ public class Warehouse {
     @Getter
     @Setter
     @Column(nullable = false, name = "capacity_unit", length = 50)
-    private String capacityUnit;
+    @Enumerated(EnumType.ORDINAL)
+    private CapacityUnit capacityUnit;
 
     /**
      * Timestamp when the warehouse was created.

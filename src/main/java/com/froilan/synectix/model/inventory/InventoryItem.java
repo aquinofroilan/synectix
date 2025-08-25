@@ -1,6 +1,7 @@
 package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.Company;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,11 +13,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -61,7 +64,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "quantity_on_hand", columnDefinition = "DECIMAL(15,3)")
+    @Column(nullable = false, name = "quantity_on_hand", columnDefinition = "DECIMAL(15,2)")
     private Float quantityOnHand;
 
     /**
@@ -70,7 +73,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "quantity_allocated", columnDefinition = "DECIMAL(15,3)")
+    @Column(nullable = false, name = "quantity_allocated", columnDefinition = "DECIMAL(15,2)")
     private Float quantityAllocated;
 
     /**
@@ -80,7 +83,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "quantity_available", columnDefinition = "DECIMAL(15,3)")
+    @Column(nullable = false, name = "quantity_available", columnDefinition = "DECIMAL(15,2)")
     private Float quantityAvailable;
 
     /**
@@ -89,7 +92,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "quantity_on_order", columnDefinition = "DECIMAL(15,3)")
+    @Column(nullable = false, name = "quantity_on_order", columnDefinition = "DECIMAL(15,2)")
     private Float quantityOnOrder;
 
     /**
@@ -99,7 +102,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "average_cost",columnDefinition = "DECIMAL(15,3)")
+    @Column(nullable = false, name = "average_cost",columnDefinition = "DECIMAL(15,2)")
     private Float averageCost;
 
     /**
@@ -108,7 +111,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "last_cost", columnDefinition = "DECIMAL(15,3)")
+    @Column(nullable = false, name = "last_cost", columnDefinition = "DECIMAL(15,2)")
     private Float lastCost;
 
     /**
@@ -127,7 +130,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(100)", nullable = false, name = "lot_number")
+    @Column(nullable = false, name = "lot_number", length = 100)
     private String lotNumber;
 
     /**
@@ -137,7 +140,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(100)", nullable = false, name = "serial_number")
+    @Column(nullable = false, name = "serial_number", length = 100)
     private String serialNumber;
 
     /**

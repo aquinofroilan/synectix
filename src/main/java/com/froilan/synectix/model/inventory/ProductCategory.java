@@ -79,6 +79,15 @@ public class ProductCategory {
     private String description;
 
     /**
+     * Indicates whether the product category is active.
+     * This variable is used to display the active status of the product category in the application.
+     */
+    @Getter
+    @Setter
+    @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN")
+    private boolean isActive;
+
+    /**
      * Timestamp when the product category was created.
      * This variable is used to display the creation time of the product category in the application.
      */

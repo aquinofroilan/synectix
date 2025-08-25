@@ -14,13 +14,11 @@ import com.froilan.synectix.model.lookup.OrganizationType;
 import com.froilan.synectix.repository.CountryRepository;
 import com.froilan.synectix.repository.OrganizationTypeRepository;
 import com.froilan.synectix.repository.user.UserRepository;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,8 +47,7 @@ public class AuthenticationService {
             .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist."));
         if (!passwordEncoder.matches(password, user.getHashedPassword()))
             throw new WrongPasswordException("Wrong password.");
-        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUserUuid().toString(), user.getCompany().getUuid().toString(), Arrays.asList(new String[]{
-            "SAMPLE_PERMISSION"}));
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUserUuid().toString(), user.getCompany().getUuid().toString(), List.of("SAMPLE_PERMISSION"));
         String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUserUuid().toString(), user.getCompany().getUuid().toString());
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }

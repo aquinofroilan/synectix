@@ -36,8 +36,9 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "product", uniqueConstraints = @UniqueConstraint(columnNames = { "product_uuid" }))
+@Table(name = "product", uniqueConstraints = @UniqueConstraint(columnNames = {"product_uuid"}))
 public class Product {
+
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -51,8 +52,8 @@ public class Product {
 
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "fk_product_category_id", nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "fk_product_category_id", nullable = false)
     private ProductCategory productCategory;
 
     /**
@@ -79,7 +80,7 @@ public class Product {
      */
     @Setter
     @Getter
-    @Column(nullable = false, name = "product_description" )
+    @Column(nullable = false, name = "product_description")
     private String productDescription;
 
     /**
@@ -327,4 +328,5 @@ public class Product {
     @UpdateTimestamp
     @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Instant updatedAt;
+
 }

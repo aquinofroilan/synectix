@@ -11,14 +11,14 @@ import java.util.UUID;
 public interface InventoryTransactionRepository extends JpaRepository<InventoryTransaction, UUID> {
     /**
      * Finds an inventory transaction by its UUID.
-     * @param transactionUuid the UUID of the inventory transaction
+     * @param inventoryTransactionUuid the UUID of the inventory transaction
      * @return the inventory transaction if found, or null if not found
      */
     InventoryTransaction findByInventoryTransactionUuid(UUID inventoryTransactionUuid);
 
     /**
      * Checks if an inventory transaction exists by its UUID.
-     * @param transactionUuid the UUID of the inventory transaction
+     * @param inventoryTransactionUuid the UUID of the inventory transaction
      * @return true if an inventory transaction with the given UUID exists, false otherwise
      */
     boolean existsByInventoryTransactionUuid(UUID inventoryTransactionUuid);
