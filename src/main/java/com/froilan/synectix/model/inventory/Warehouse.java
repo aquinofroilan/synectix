@@ -71,7 +71,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "warehouse_code", columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false, name = "warehouse_code", length = 50)
     private String warehouseCode;
 
     /**
@@ -80,7 +80,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "description", columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, name = "description")
     private String description;
 
     /**
@@ -89,7 +89,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "address_line_1", columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, name = "address_line_1")
     private String addressLine1;
 
     /**
@@ -98,7 +98,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "address_line_2", columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, name = "address_line_2")
     private String addressLine2;
 
     /**
@@ -107,7 +107,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "city", columnDefinition = "VARCHAR(100)")
+    @Column(nullable = false, name = "city", length = 100)
     private String city;
 
     /**
@@ -116,7 +116,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "state_province", columnDefinition = "VARCHAR(100)")
+    @Column(nullable = false, name = "state_province", length = 100)
     private String stateProvince;
 
     /**
@@ -125,7 +125,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "postal_code", columnDefinition = "VARCHAR(20)")
+    @Column(nullable = false, name = "postal_code", length = 20)
     private String postalCode;
 
     /**
@@ -134,7 +134,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "warehouse_type", columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false, name = "warehouse_type", length = 50)
     private String warehouseType;
 
     /**
@@ -161,7 +161,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "capacity_unit", columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false, name = "capacity_unit", length = 50)
     private String capacityUnit;
 
     /**
