@@ -1,11 +1,8 @@
 package com.froilan.synectix.model;
 
-import java.time.Instant;
-import java.util.UUID;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
+import com.froilan.synectix.model.inventory.InventoryTransaction;
+import com.froilan.synectix.model.inventory.Product;
+import com.froilan.synectix.model.inventory.Warehouse;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +10,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -22,12 +23,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.Instant;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Represents a user in the PostgreSQL database.
@@ -35,7 +41,7 @@ import lombok.Setter;
  * last name, email, role, and password.
  */
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "email", "uuid",
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "email", "user_uuid",
     "phone_number"}))
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,8 +54,8 @@ public class User {
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID uuid;
+    @Column(name = "user_uuid", updatable = false, nullable = false)
+    private UUID userUuid;
 
     /**
      * The username of the user.
@@ -180,7 +186,31 @@ public class User {
      */
     @Getter
     @Setter
-    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Company company;
 
+    @Getter
+    @Setter
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_warehouse_association",
+        joinColumns = @JoinColumn(name = "user_uuid"),
+        inverseJoinColumns = @JoinColumn(name = "warehouse_uuid")
+    )
+    private Set<Warehouse> warehouse;
+
+    @Getter
+    @Setter
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<InventoryTransaction> inventoryTransactions;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Product> createdProducts;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Product> updatedProducts;
 }
