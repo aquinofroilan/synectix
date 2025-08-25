@@ -57,7 +57,7 @@ public class ProductCategory {
      */
     @Getter
     @Setter
-    @Column(nullable = false, unique = true, name = "product_category_name", length = 50, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false, unique = true, name = "product_category_name", length = 50)
     private String productCategoryName;
 
     /**
@@ -66,7 +66,7 @@ public class ProductCategory {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "productCategoryCode", length = 50, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false, name = "productCategoryCode", length = 50)
     private String productCategoryCode;
 
     /**
@@ -75,7 +75,7 @@ public class ProductCategory {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "description", columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, name = "description")
     private String description;
 
     /**

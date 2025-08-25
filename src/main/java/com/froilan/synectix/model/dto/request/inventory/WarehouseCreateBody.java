@@ -1,5 +1,7 @@
 package com.froilan.synectix.model.dto.request.inventory;
 
+import com.froilan.synectix.model.enums.product.CapacityUnit;
+import com.froilan.synectix.model.enums.product.WarehouseType;
 import jakarta.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
@@ -38,13 +40,13 @@ public class WarehouseCreateBody {
     private String postalCode;
 
     @NotBlank(message = "Warehouse type cannot be blank")
-    private String warehouseType;
+    private WarehouseType  warehouseType;
 
     @NotBlank(message = "Capacity limit cannot be blank")
     private double capacityLimit;
 
     @NotBlank(message = "Capacity unit cannot be blank")
-    private String capacityUnit;
+    private CapacityUnit capacityUnit;
 
     @Builder.Default
     private boolean isActive = true;
