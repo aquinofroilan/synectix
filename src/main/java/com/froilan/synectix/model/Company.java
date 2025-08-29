@@ -115,9 +115,8 @@ public class Company {
 
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "warehouse_uuid", nullable = false)
-    private Warehouse warehouse;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company", cascade = CascadeType.PERSIST)
+    private Set<Warehouse> warehouse;
 
     @Getter
     @Setter

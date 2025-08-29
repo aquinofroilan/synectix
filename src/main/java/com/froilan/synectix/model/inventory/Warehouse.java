@@ -47,7 +47,8 @@ public class Warehouse {
 
     @Getter
     @Setter
-    @OneToOne(cascade = CascadeType.PERSIST, mappedBy = "warehouse")
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_company_uuid", nullable = false)
     private Company company;
 
     @Getter
