@@ -1,5 +1,6 @@
 package com.froilan.synectix.model.lookup;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.froilan.synectix.model.Company;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +15,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Entity
@@ -25,7 +26,7 @@ public class OrganizationType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true, name = "name", length = 50, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false, unique = true, name = "name", length = 50)
     @NotBlank(message = "Organization type name cannot be blank")
     @Size(max = 50, message = "Organization type name cannot exceed 50 characters")
     private String name;
@@ -33,5 +34,10 @@ public class OrganizationType {
     @Getter
     @Setter
     @OneToMany(mappedBy = "organizationType")
-    private Set<Company> companies;
+    @JsonIgnore
+    private List<Company> companies;
+
+    public OrganizationType(Integer id, @NotBlank(message = "Organization type name cannot be blank") @Size(max = 50, message = "Organization type name cannot exceed 50 characters") String name) {
+    }
+
 }

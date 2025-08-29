@@ -34,14 +34,14 @@ public class Country {
      * This variable is used to display the country's name in the application.
      */
     @Getter
-    @Column(nullable = false, unique = true, name = "name", columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false, unique = true, name = "name", length = 50)
     private String name;
 
     @Getter
-    @OneToMany(mappedBy = "country", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
     private List<Company> companies;
 
     @Getter
-    @OneToMany(mappedBy = "country", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
     private List<Warehouse> warehouses;
 }

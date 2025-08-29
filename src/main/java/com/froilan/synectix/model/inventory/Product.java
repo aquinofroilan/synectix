@@ -128,7 +128,7 @@ public class Product {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "base_cost", columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+    @Column(nullable = false, name = "base_cost", precision = 15, scale = 2)
     private Float baseCost = 0f;
 
     /**
@@ -138,7 +138,7 @@ public class Product {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "selling_price", columnDefinition = "DECIMAL(15,2) DEFAULT 0.00")
+    @Column(nullable = false, name = "selling_price", precision = 15, scale = 2)
     private Float sellingPrice = 0f;
 
     /**
@@ -148,7 +148,7 @@ public class Product {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "weight", columnDefinition = "DECIMAL(10,3) DEFAULT 0.000")
+    @Column(nullable = false, name = "weight", precision = 10, scale = 3)
     private Float weight = 0f;
 
     /**
@@ -168,7 +168,7 @@ public class Product {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "dimensions_length", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
+    @Column(nullable = false, name = "dimensions_length", precision = 10, scale = 2)
     private Float dimensionsLength = 0f;
 
     /**
@@ -178,18 +178,19 @@ public class Product {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "dimensions_width", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
+    @Column(nullable = false, name = "dimensions_width", precision = 10, scale = 2)
     private Float dimensionsWidth = 0f;
 
     /**
      * The height of the product.
      * This variable is used to store the height dimension of the product.
      */
-    
+
+
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "dimensions_height", columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
+    @Column(nullable = false, name = "dimensions_height", precision = 10, scale = 2)
     private Float dimensionsHeight = 0f;
 
     /**
@@ -227,7 +228,7 @@ public class Product {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "minimum_stock_level", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
+    @Column(nullable = false, name = "minimum_stock_level", precision = 15, scale = 2)
     private Float minimumStockLevel = 0f;
 
     /**
@@ -237,7 +238,7 @@ public class Product {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "reorder_point", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
+    @Column(nullable = false, name = "reorder_point", precision = 15, scale = 2)
     private Float reorderPoint = 0f;
 
     /**
@@ -247,7 +248,7 @@ public class Product {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "reorder_quantity", columnDefinition = "DECIMAL(15,2) DEFAULT 0")
+    @Column(nullable = false, name = "reorder_quantity", precision = 15, scale = 2)
     private Float reorderQuantity = 0f;
 
     /**
@@ -257,7 +258,7 @@ public class Product {
     @Setter
     @Getter
     @Builder.Default
-    @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT true")
+    @Column(nullable = false, name = "is_active")
     private Boolean isActive = true;
 
     /**
@@ -267,7 +268,7 @@ public class Product {
     @Setter
     @Getter
     @Builder.Default
-    @Column(nullable = false, name = "is_serialized", columnDefinition = "BOOLEAN DEFAULT false")
+    @Column(nullable = false, name = "is_serialized")
     private Boolean isSerialized = false;
 
     /**
@@ -277,7 +278,7 @@ public class Product {
     @Setter
     @Getter
     @Builder.Default
-    @Column(nullable = false, name = "is_lot_tracked", columnDefinition = "BOOLEAN DEFAULT false")
+    @Column(nullable = false, name = "is_lot_tracked")
     private Boolean isLotTracked = false;
 
     /**
@@ -287,7 +288,7 @@ public class Product {
     @Setter
     @Getter
     @Builder.Default
-    @Column(nullable = false, name = "expiration_tracking", columnDefinition = "BOOLEAN DEFAULT false")
+    @Column(nullable = false, name = "expiration_tracking")
     private Boolean expirationTracking = false;
 
     /**
@@ -317,7 +318,7 @@ public class Product {
     @Getter
     @Setter
     @CreationTimestamp
-    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, name = "created_at")
     private Instant createdAt;
 
     /**
@@ -327,7 +328,7 @@ public class Product {
     @Getter
     @Setter
     @UpdateTimestamp
-    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
 
 }

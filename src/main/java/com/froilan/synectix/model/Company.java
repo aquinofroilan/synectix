@@ -53,7 +53,7 @@ public class Company {
      */
     @Getter
     @Setter
-    @Column(nullable = false, unique = true, name = "name", length = 100, columnDefinition = "VARCHAR(100)")
+    @Column(nullable = false, unique = true, name = "name", length = 100)
     @NotBlank(message = "Company name cannot be blank")
     @Size(max = 100, message = "Company name cannot exceed 100 characters")
     private String name;
@@ -65,7 +65,7 @@ public class Company {
      */
     @Getter
     @Setter
-    @Column(nullable = false, unique = true, name = "registration_number", length = 100, columnDefinition = "VARCHAR(100)")
+    @Column(nullable = false, unique = true, name = "registration_number", length = 100)
     @NotBlank(message = "Registration number cannot be blank")
     @Size(max = 100, message = "Registration number cannot exceed 100 characters")
     private String registrationNumber;
@@ -76,7 +76,7 @@ public class Company {
      */
     @Getter
     @Setter
-    @Column(nullable = false, unique = true, name = "tax_number", length = 50, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false, unique = true, name = "tax_number", length = 50)
     @NotBlank(message = "Tax number cannot be blank")
     @Size(max = 50, message = "Tax number cannot exceed 50 characters")
     private String taxNumber;

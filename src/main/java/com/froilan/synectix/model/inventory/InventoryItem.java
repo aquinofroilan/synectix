@@ -64,7 +64,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "quantity_on_hand", columnDefinition = "DECIMAL(15,2)")
+    @Column(nullable = false, name = "quantity_on_hand", precision = 15, scale = 2)
     private Float quantityOnHand;
 
     /**
@@ -73,7 +73,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "quantity_allocated", columnDefinition = "DECIMAL(15,2)")
+    @Column(nullable = false, name = "quantity_allocated", precision = 15, scale = 2)
     private Float quantityAllocated;
 
     /**
@@ -83,7 +83,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "quantity_available", columnDefinition = "DECIMAL(15,2)")
+    @Column(nullable = false, name = "quantity_available", precision = 15, scale = 2)
     private Float quantityAvailable;
 
     /**
@@ -92,7 +92,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "quantity_on_order", columnDefinition = "DECIMAL(15,2)")
+    @Column(nullable = false, name = "quantity_on_order", precision = 15, scale = 2)
     private Float quantityOnOrder;
 
     /**
@@ -102,7 +102,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "average_cost",columnDefinition = "DECIMAL(15,2)")
+    @Column(nullable = false, name = "average_cost", precision = 15, scale = 2)
     private Float averageCost;
 
     /**
@@ -111,7 +111,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "last_cost", columnDefinition = "DECIMAL(15,2)")
+    @Column(nullable = false, name = "last_cost", precision = 15, scale = 2)
     private Float lastCost;
 
     /**
@@ -120,7 +120,7 @@ public class InventoryItem {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(50)", nullable = false, name = "location_code")
+    @Column(nullable = false, name = "location_code", length = 50)
     private String locationCode;
 
     /**
@@ -181,7 +181,7 @@ public class InventoryItem {
     @Getter
     @Setter
     @CreationTimestamp
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "created_at")
+    @Column(nullable = false, name = "created_at")
     private Instant createdAt;
 
     /**
@@ -192,7 +192,7 @@ public class InventoryItem {
     @Getter
     @Setter
     @UpdateTimestamp
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "updated_at")
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
 
 }

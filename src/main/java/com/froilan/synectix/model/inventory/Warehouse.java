@@ -153,7 +153,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN")
+    @Column(nullable = false, name = "is_active")
     private boolean isActive;
 
     /**
@@ -162,7 +162,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "capacity_limit", columnDefinition = "DECIMAL(10, 2)")
+    @Column(nullable = false, name = "capacity_limit", precision = 10, scale = 2)
     private double capacityLimit;
 
     /**
@@ -181,7 +181,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
+    @Column(nullable = false, name = "created_at")
     private Instant createdAt;
 
     /**
@@ -190,7 +190,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP")
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
 
     /**

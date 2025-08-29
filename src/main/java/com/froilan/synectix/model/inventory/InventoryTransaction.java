@@ -40,7 +40,7 @@ public class InventoryTransaction {
 
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(100)", nullable = false, name = "transaction_type", length = 100)
+    @Column(nullable = false, name = "transaction_type", length = 100)
     private String transactionType;
 
     /* Reason for the inventory transaction.
@@ -49,7 +49,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(100)", nullable = false, name = "transaction_reason", length = 100)
+    @Column( nullable = false, name = "transaction_reason", length = 100)
     private String transactionReason;
 
     /* Inventory transaction is associated with a specific product.
@@ -70,7 +70,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "DECIMAL", nullable = false, name = "quantity")
+    @Column(nullable = false, name = "quantity", precision = 15, scale = 2)
     private Float quantity;
 
     /* Inventory transaction is associated with a specific product.
@@ -80,7 +80,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "unit_cost")
+    @Column(nullable = false, name = "unit_cost", precision = 15, scale = 2)
     private Float unitCost;
 
     /* Inventory transaction is associated with a specific product.
@@ -90,7 +90,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "total_cost")
+    @Column(nullable = false, name = "total_cost", precision = 15, scale = 2)
     private Float totalCost;
 
     /* The date and time when the inventory transaction occurred.
@@ -99,7 +99,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "transaction_date")
+    @Column(nullable = false, name = "transaction_date")
     private Instant transactionDate;
 
     /* Reference type for the inventory transaction.
@@ -108,7 +108,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(50)", name = "reference_type")
+    @Column(name = "reference_type", length = 50)
     private String referenceType;
 
     /* Reference ID for the inventory transaction.
@@ -117,7 +117,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(50)", name = "reference_id")
+    @Column(name = "reference_id", length = 50)
     private String referenceId;
 
     /* Reference number for the inventory transaction.
@@ -126,7 +126,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(50)", name = "reference_number", length = 50)
+    @Column(name = "reference_number", length = 50)
     private String referenceNumber;
 
     /* The running balance of the inventory after the transaction.
@@ -135,7 +135,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "DECIMAL(15,2)", nullable = false, name = "running_balance")
+    @Column(nullable = false, name = "running_balance", precision = 15, scale = 2)
     private Float runningBalance;
 
     /* The user who performed the inventory transaction.
@@ -155,7 +155,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(50)", name = "notes", length = 50)
+    @Column(name = "notes", length = 50)
     private String notes;
 
     /* Lot number for the inventory item involved in the transaction.
@@ -164,7 +164,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(50)", name = "lot_number")
+    @Column(name = "lot_number", length = 50)
     private String lotNumber;
 
     /* Serial number for the inventory item involved in the transaction.
@@ -173,7 +173,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(100)", name = "serialNumber", length = 100)
+    @Column(name = "serialNumber", length = 100)
     private String serialNumber;
 
     /* Expiration date for the inventory item involved in the transaction.
@@ -182,7 +182,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "expiration_date")
+    @Column(name = "expiration_date", nullable = false)
     private Instant expirationDate;
 
     /* Location code within the warehouse where the inventory item is stored.
@@ -191,7 +191,7 @@ public class InventoryTransaction {
      */
     @Getter
     @Setter
-    @Column(columnDefinition = "VARCHAR(50)", name = "location_code", length = 50)
+    @Column(name = "location_code", length = 50)
     private String locationCode;
 
     /* The timestamp when the inventory transaction record was created.
@@ -201,7 +201,7 @@ public class InventoryTransaction {
     @Getter
     @Setter
     @CreationTimestamp
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "created_at")
+    @Column(nullable = false, name = "created_at")
     private Instant createdAt;
 
     /* The timestamp when the inventory transaction record was last updated.
@@ -211,7 +211,7 @@ public class InventoryTransaction {
     @Getter
     @Setter
     @UpdateTimestamp
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, name = "updated_at")
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
 
 }

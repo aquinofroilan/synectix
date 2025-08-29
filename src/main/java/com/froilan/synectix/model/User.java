@@ -3,6 +3,7 @@ package com.froilan.synectix.model;
 import com.froilan.synectix.model.inventory.InventoryTransaction;
 import com.froilan.synectix.model.inventory.Product;
 import com.froilan.synectix.model.inventory.Warehouse;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,19 +18,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.Set;
@@ -63,9 +60,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "username", length = 50, columnDefinition = "VARCHAR(50)")
-    @NotBlank(message = "Username cannot be blank")
-    @Size(max = 50, message = "Username cannot exceed 50 characters")
+    @Column(nullable = false, unique = true, name = "username", length = 50)
     private String username;
 
     /**
@@ -74,9 +69,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "first_name", length = 50, columnDefinition = "VARCHAR(50)")
-    @NotBlank(message = "First name cannot be blank")
-    @Size(max = 50, message = "First name cannot exceed 50 characters")
+    @Column(nullable = false, unique = true, name = "first_name", length = 50)
     private String firstName;
 
     /**
@@ -85,9 +78,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "last_name", length = 50, columnDefinition = "VARCHAR(50)")
-    @NotBlank(message = "Last name cannot be blank")
-    @Size(max = 50, message = "Last name cannot exceed 50 characters")
+    @Column(nullable = false, unique = true, name = "last_name", length = 50)
     private String lastName;
 
     /**
@@ -96,10 +87,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "email", length = 100, columnDefinition = "VARCHAR(100)")
-    @NotBlank(message = "Email cannot be blank")
-    @Size(max = 100, message = "Email cannot exceed 100 characters")
-    @Email(message = "Email should be valid")
+    @Column(nullable = false, unique = true, name = "email", length = 100)
     private String email;
 
     /**
@@ -108,10 +96,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "phone_number", length = 15, columnDefinition = "VARCHAR(15)")
-    @NotBlank(message = "Phone number cannot be blank")
-    @Size(max = 15, message = "Phone number cannot exceed 15 characters")
-    @Pattern(regexp = "^\\+?[0-9]{1,15}$", message = "Phone number must be valid")
+    @Column(nullable = false, unique = true, name = "phone_number", length = 15)
     private String phoneNumber;
 
     /**
@@ -120,9 +105,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "hashed_password", columnDefinition = "VARCHAR(255)")
-    @NotBlank(message = "Password cannot be blank")
-    @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters")
+    @Column(nullable = false, unique = true, name = "hashed_password")
     private String hashedPassword;
 
     /**
@@ -133,7 +116,7 @@ public class User {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
 
     /**
@@ -144,7 +127,7 @@ public class User {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(nullable = false, name = "is_active")
     private boolean isActive = true;
 
     /**
@@ -163,10 +146,8 @@ public class User {
      * application.
      */
     @Getter
-    @CreatedDate
+    @CreationTimestamp
     @Column(nullable = false, name = "created_at", updatable = false)
-    @PastOrPresent(message = "Created at must be in the past or present")
-    @NotNull(message = "Created at cannot be null")
     private Instant createdAt;
 
     /**
@@ -175,9 +156,8 @@ public class User {
      * application.
      */
     @Getter
-    @LastModifiedDate
-    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    @PastOrPresent(message = "Updated at must be in the past or present")
+    @UpdateTimestamp
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
 
     /**
