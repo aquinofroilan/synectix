@@ -37,7 +37,4 @@ public class OrganizationType {
     @JsonIgnore
     private List<Company> companies;
 
-    public OrganizationType(Integer id, @NotBlank(message = "Organization type name cannot be blank") @Size(max = 50, message = "Organization type name cannot exceed 50 characters") String name) {
-    }
-
 }

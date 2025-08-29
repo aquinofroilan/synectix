@@ -27,6 +27,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
@@ -163,7 +164,7 @@ public class Warehouse {
     @Getter
     @Setter
     @Column(nullable = false, name = "capacity_limit", precision = 10, scale = 2)
-    private double capacityLimit;
+    private BigDecimal capacityLimit;
 
     /**
      * The capacity unit of the warehouse.

@@ -1,5 +1,6 @@
 package com.froilan.synectix.model.lookup;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.inventory.Warehouse;
 
@@ -39,9 +40,11 @@ public class Country {
 
     @Getter
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Company> companies;
 
     @Getter
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Warehouse> warehouses;
 }

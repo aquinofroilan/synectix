@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,7 +45,7 @@ public class WarehouseCreateBody {
     private WarehouseType  warehouseType;
 
     @NotBlank(message = "Capacity limit cannot be blank")
-    private double capacityLimit;
+    private BigDecimal capacityLimit;
 
     @NotBlank(message = "Capacity unit cannot be blank")
     private CapacityUnit capacityUnit;

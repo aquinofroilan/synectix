@@ -39,7 +39,7 @@ public class LookupService {
      * @return a list of all organization types
      */
     public List<OrganizationType> getAllOrganizationTypes() {
-        return organizationTypeRepository.findAll().stream().map(ot -> new OrganizationType(ot.getId(), ot.getName())).toList();
+        return organizationTypeRepository.findAll();
     }
 
     public List<Role> getAllRoles() {
