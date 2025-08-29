@@ -23,6 +23,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -65,7 +66,7 @@ public class InventoryItem {
     @Getter
     @Setter
     @Column(nullable = false, name = "quantity_on_hand", precision = 15, scale = 2)
-    private Float quantityOnHand;
+    private BigDecimal quantityOnHand;
 
     /**
      * Quantity of the product that has been allocated for orders but not yet shipped.
@@ -74,7 +75,7 @@ public class InventoryItem {
     @Getter
     @Setter
     @Column(nullable = false, name = "quantity_allocated", precision = 15, scale = 2)
-    private Float quantityAllocated;
+    private BigDecimal quantityAllocated;
 
     /**
      * Quantity of the product that is available for new orders.
@@ -84,7 +85,7 @@ public class InventoryItem {
     @Getter
     @Setter
     @Column(nullable = false, name = "quantity_available", precision = 15, scale = 2)
-    private Float quantityAvailable;
+    private BigDecimal quantityAvailable;
 
     /**
      * Quantity of the product that has been ordered from suppliers but not yet received.
@@ -93,7 +94,7 @@ public class InventoryItem {
     @Getter
     @Setter
     @Column(nullable = false, name = "quantity_on_order", precision = 15, scale = 2)
-    private Float quantityOnOrder;
+    private BigDecimal quantityOnOrder;
 
     /**
      * Average cost of the product in inventory.
@@ -103,7 +104,7 @@ public class InventoryItem {
     @Getter
     @Setter
     @Column(nullable = false, name = "average_cost", precision = 15, scale = 2)
-    private Float averageCost;
+    private BigDecimal averageCost;
 
     /**
      * The last recorded cost of the product.
@@ -112,7 +113,7 @@ public class InventoryItem {
     @Getter
     @Setter
     @Column(nullable = false, name = "last_cost", precision = 15, scale = 2)
-    private Float lastCost;
+    private BigDecimal lastCost;
 
     /**
      * The location code within the warehouse where the product is stored.

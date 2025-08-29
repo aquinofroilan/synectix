@@ -23,6 +23,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -71,7 +72,7 @@ public class InventoryTransaction {
     @Getter
     @Setter
     @Column(nullable = false, name = "quantity", precision = 15, scale = 2)
-    private Float quantity;
+    private BigDecimal quantity;
 
     /* Inventory transaction is associated with a specific product.
      * This relationship is established using a foreign key constraint.
@@ -81,7 +82,7 @@ public class InventoryTransaction {
     @Getter
     @Setter
     @Column(nullable = false, name = "unit_cost", precision = 15, scale = 2)
-    private Float unitCost;
+    private BigDecimal unitCost;
 
     /* Inventory transaction is associated with a specific product.
      * This relationship is established using a foreign key constraint.
@@ -91,7 +92,7 @@ public class InventoryTransaction {
     @Getter
     @Setter
     @Column(nullable = false, name = "total_cost", precision = 15, scale = 2)
-    private Float totalCost;
+    private BigDecimal totalCost;
 
     /* The date and time when the inventory transaction occurred.
      * This field is automatically set to the current timestamp when the record is created.
@@ -136,7 +137,7 @@ public class InventoryTransaction {
     @Getter
     @Setter
     @Column(nullable = false, name = "running_balance", precision = 15, scale = 2)
-    private Float runningBalance;
+    private BigDecimal runningBalance;
 
     /* The user who performed the inventory transaction.
      * This relationship is established using a foreign key constraint.

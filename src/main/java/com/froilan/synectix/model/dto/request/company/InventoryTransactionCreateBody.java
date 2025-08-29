@@ -1,5 +1,6 @@
 package com.froilan.synectix.model.dto.request.company;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import jakarta.validation.constraints.NotBlank;
@@ -14,22 +15,22 @@ import lombok.NoArgsConstructor;
 @Builder
 public class InventoryTransactionCreateBody {
     @NotBlank(message = "Quantity on hand cannot be blank")
-    private Float quantityOnHand;
+    private BigDecimal quantityOnHand;
 
     @NotBlank(message = "Quantity allocated cannot be blank")
-    private Float quantityAllocated;
+    private BigDecimal quantityAllocated;
 
     @NotBlank(message = "Quantity available cannot be blank")
-    private Float quantityAvailable;
+    private BigDecimal quantityAvailable;
 
     @NotBlank(message = "Quantity on order cannot be blank")
-    private Float quantityOnOrder;
+    private BigDecimal quantityOnOrder;
 
     @NotBlank(message = "Average cost cannot be blank")
-    private Float averageCost;
+    private BigDecimal averageCost;
 
     @NotBlank(message = "Last cost cannot be blank")
-    private Float lastCost;
+    private BigDecimal lastCost;
 
     @NotBlank(message = "Location code cannot be blank")
     private String locationCode;
@@ -56,13 +57,13 @@ public class InventoryTransactionCreateBody {
     private String transactionReason;
 
     @NotBlank(message = "Quantity cannot be blank")
-    private Float quantity;
+    private BigDecimal quantity;
 
     @NotBlank(message = "Unit costs cannot be blank")
-    private Float unitCosts;
+    private BigDecimal unitCosts;
 
     @NotBlank(message = "Total costs cannot be blank")
-    private Float totalCosts;
+    private BigDecimal totalCosts;
 
     @NotBlank(message = "Notes cannot be blank")
     private String notes;

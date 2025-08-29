@@ -1,5 +1,6 @@
 package com.froilan.synectix.model.dto.request.inventory;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class InventoryTransactionCreateBody {
 
     @NotBlank(message = "Unit cost is required")
-    private Float unitCost;
+    private BigDecimal unitCost;
 
     @NotBlank(message = "Quantity is required")
     private Integer quantity;

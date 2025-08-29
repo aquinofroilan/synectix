@@ -29,6 +29,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -129,7 +130,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "base_cost", precision = 15, scale = 2)
-    private Float baseCost = 0f;
+    private BigDecimal baseCost = BigDecimal.ZERO;
 
     /**
      * The selling price of the product.
@@ -139,7 +140,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "selling_price", precision = 15, scale = 2)
-    private Float sellingPrice = 0f;
+    private BigDecimal sellingPrice = BigDecimal.ZERO;
 
     /**
      * The weight of the product.
@@ -149,7 +150,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "weight", precision = 10, scale = 3)
-    private Float weight = 0f;
+    private BigDecimal weight = BigDecimal.ZERO;
 
     /**
      * The unit of weight for the product.
@@ -169,7 +170,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "dimensions_length", precision = 10, scale = 2)
-    private Float dimensionsLength = 0f;
+    private BigDecimal dimensionsLength = BigDecimal.ZERO;
 
     /**
      * The width of the product.
@@ -179,7 +180,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "dimensions_width", precision = 10, scale = 2)
-    private Float dimensionsWidth = 0f;
+    private BigDecimal dimensionsWidth = BigDecimal.ZERO;
 
     /**
      * The height of the product.
@@ -191,7 +192,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "dimensions_height", precision = 10, scale = 2)
-    private Float dimensionsHeight = 0f;
+    private BigDecimal dimensionsHeight = BigDecimal.ZERO;
 
     /**
      * The unit of measurement for the product's dimensions.
@@ -229,7 +230,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "minimum_stock_level", precision = 15, scale = 2)
-    private Float minimumStockLevel = 0f;
+    private BigDecimal minimumStockLevel = BigDecimal.ZERO;
 
     /**
      * The reorder point for the product.
@@ -239,7 +240,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "reorder_point", precision = 15, scale = 2)
-    private Float reorderPoint = 0f;
+    private BigDecimal reorderPoint = BigDecimal.ZERO;
 
     /**
      * The reorder quantity for the product.
@@ -249,7 +250,7 @@ public class Product {
     @Setter
     @Builder.Default
     @Column(nullable = false, name = "reorder_quantity", precision = 15, scale = 2)
-    private Float reorderQuantity = 0f;
+    private BigDecimal reorderQuantity = BigDecimal.ZERO;
 
     /**
      * Indicates whether the product is deleted.

@@ -1,5 +1,7 @@
 package com.froilan.synectix.model.dto.request.inventory;
 
+import java.math.BigDecimal;
+
 import com.froilan.synectix.model.enums.product.DimensionUnit;
 import com.froilan.synectix.model.enums.product.ProductType;
 import com.froilan.synectix.model.enums.product.UnitMeasure;
@@ -47,20 +49,20 @@ public class ProductCreateBody {
     @NotBlank(message = "Unit measure cannot be blank")
     private UnitMeasure unitMeasure;
 
-    private Float baseCost;
+    private BigDecimal baseCost;
 
-    private Float sellingPrice;
+    private BigDecimal sellingPrice;
 
-    private Float weight;
+    private BigDecimal weight;
 
     @NotBlank(message = "Weight unit cannot be blank")
     private WeightUnit weightUnit;
 
-    private Float dimensionsLength;
+    private BigDecimal dimensionsLength;
 
-    private Float dimensionsWidth;
+    private BigDecimal dimensionsWidth;
 
-    private Float dimensionsHeight;
+    private BigDecimal dimensionsHeight;
 
     @NotBlank(message = "Dimension unit cannot be blank")
     private DimensionUnit dimensionUnit;
@@ -72,13 +74,13 @@ public class ProductCreateBody {
     private String qrCode;
 
     @Builder.Default
-    private Float minimumStockLevel = 0.0f;
+    private BigDecimal minimumStockLevel = BigDecimal.ZERO;
 
     @Builder.Default
-    private Float reorderPoint = 0.0f;
+    private BigDecimal reorderPoint = BigDecimal.ZERO;
 
     @Builder.Default
-    private Float reorderQuantity = 0.0f;
+    private BigDecimal reorderQuantity = BigDecimal.ZERO;
 
     @Builder.Default
     private boolean isActive = true;
