@@ -31,7 +31,8 @@ public class WarehouseManagementService {
     }
 
     @Transactional
-    public Warehouse createWarehouse(WarehouseCreateBody newWarehouse, String userUuid, String companyUuid) throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
+    public Warehouse createWarehouse(WarehouseCreateBody newWarehouse, String userUuid, String companyUuid)
+            throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
         User creatorReference = entityManager.getReference(User.class, UUID.fromString(userUuid));
         Company companyReference = entityManager.getReference(Company.class, UUID.fromString(companyUuid));
         Country countryReference = entityManager.getReference(Country.class, newWarehouse.getCountryId());
@@ -91,8 +92,29 @@ public class WarehouseManagementService {
     }
 
     @Transactional
-    public void updateWarehouse(String uuid, WarehouseCreateBody updatedWarehouse, String userUuid, String companyUuid)
+    public void updateWarehouse(String uuid, WarehouseCreateBody updatedWarehouse, String userUuid, String companyUuid, String warehouseUuid)
             throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
+        Warehouse existingWarehouse = warehouseRepository.findByWarehouseUuid(UUID.fromString(uuid))
+                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
+        if (!existingWarehouse.getCompany().getUuid().toString().equals(companyUuid)
+                || !existingWarehouse.getWarehouseUuid().toString().equals(warehouseUuid)) {
+            // TODO: Create custom exception
+            throw new IllegalArgumentException("Company UUID or Warehouse UUID mismatch");
+        }
 
+        User creatorReference = entityManager.getReference(User.class, userUuid);
+        existingWarehouse.setWarehouseName(updatedWarehouse.getWarehouseName());
+        existingWarehouse.setAddressLine1(updatedWarehouse.getAddressLine1());
+        existingWarehouse.setAddressLine2(updatedWarehouse.getAddressLine2());
+        existingWarehouse.setCity(updatedWarehouse.getCity());
+        existingWarehouse.setStateProvince(updatedWarehouse.getStateProvince());
+        existingWarehouse.setPostalCode(updatedWarehouse.getPostalCode());
+        existingWarehouse.setWarehouseType(updatedWarehouse.getWarehouseType());
+        existingWarehouse.setCapacityLimit(updatedWarehouse.getCapacityLimit());
+        existingWarehouse.setCapacityUnit(updatedWarehouse.getCapacityUnit());
+        existingWarehouse.setActive(updatedWarehouse.isActive());
+        existingWarehouse.setCreatedBy(creatorReference);
+        existingWarehouse.setUpdatedBy(creatorReference);
+        warehouseRepository.save(existingWarehouse);
     }
 }
