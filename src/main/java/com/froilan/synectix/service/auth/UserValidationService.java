@@ -10,6 +10,8 @@ public class UserValidationService {
         this.userRepository = userRepository;
     }
     public Boolean isEmailTaken(String email) {
+        System.out.println(email);
+        System.out.println(userRepository.existsByEmail(email));
         return userRepository.existsByEmail(email);
     }
 
