@@ -14,16 +14,17 @@ import com.froilan.synectix.model.lookup.OrganizationType;
 import com.froilan.synectix.repository.CountryRepository;
 import com.froilan.synectix.repository.OrganizationTypeRepository;
 import com.froilan.synectix.repository.user.UserRepository;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class AuthenticationService {
+
     private final JWTUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -46,8 +47,8 @@ public class AuthenticationService {
             .orElseThrow(() -> new UserNotFoundException("User with that email or username does not exist."));
         if (!passwordEncoder.matches(password, user.getHashedPassword()))
             throw new WrongPasswordException("Wrong password.");
-        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
-        String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUuid().toString());
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUserUuid().toString(), user.getCompany().getUuid().toString(), List.of("SAMPLE_PERMISSION"));
+        String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUserUuid().toString(), user.getCompany().getUuid().toString());
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 
@@ -95,9 +96,11 @@ public class AuthenticationService {
         user.setCompany(company);
         userRepository.save(user);
 
-        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUuid().toString());
-        String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUuid().toString());
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getUserUuid().toString(), user.getCompany().getUuid().toString(), List.of(
+            "SAMPLE_PERMISSION", "SAMPLE_PERMISSION"));
+        String refreshToken = jwtUtil.refreshToken(user.getUsername(), user.getUserUuid().toString(), user.getCompany().getUuid().toString());
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
 
     }
+
 }

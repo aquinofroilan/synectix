@@ -1,10 +1,8 @@
 package com.froilan.synectix.model;
 
-import java.time.Instant;
-import java.util.UUID;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import com.froilan.synectix.model.inventory.InventoryTransaction;
+import com.froilan.synectix.model.inventory.Product;
+import com.froilan.synectix.model.inventory.Warehouse;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,15 +11,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,13 +25,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
+import java.util.Set;
+import java.util.UUID;
+
 /**
  * Represents a user in the PostgreSQL database.
  * This class is used to store user information such as username, first name,
  * last name, email, role, and password.
  */
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "email", "uuid",
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "email", "user_uuid",
     "phone_number"}))
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,8 +51,8 @@ public class User {
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID uuid;
+    @Column(name = "user_uuid", updatable = false, nullable = false)
+    private UUID userUuid;
 
     /**
      * The username of the user.
@@ -57,9 +60,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "username", length = 50, columnDefinition = "VARCHAR(50)")
-    @NotBlank(message = "Username cannot be blank")
-    @Size(max = 50, message = "Username cannot exceed 50 characters")
+    @Column(nullable = false, unique = true, name = "username", length = 50)
     private String username;
 
     /**
@@ -68,9 +69,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "first_name", length = 50, columnDefinition = "VARCHAR(50)")
-    @NotBlank(message = "First name cannot be blank")
-    @Size(max = 50, message = "First name cannot exceed 50 characters")
+    @Column(nullable = false, unique = true, name = "first_name", length = 50)
     private String firstName;
 
     /**
@@ -79,9 +78,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "last_name", length = 50, columnDefinition = "VARCHAR(50)")
-    @NotBlank(message = "Last name cannot be blank")
-    @Size(max = 50, message = "Last name cannot exceed 50 characters")
+    @Column(nullable = false, unique = true, name = "last_name", length = 50)
     private String lastName;
 
     /**
@@ -90,10 +87,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "email", length = 100, columnDefinition = "VARCHAR(100)")
-    @NotBlank(message = "Email cannot be blank")
-    @Size(max = 100, message = "Email cannot exceed 100 characters")
-    @Email(message = "Email should be valid")
+    @Column(nullable = false, unique = true, name = "email", length = 100)
     private String email;
 
     /**
@@ -102,10 +96,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "phone_number", length = 15, columnDefinition = "VARCHAR(15)")
-    @NotBlank(message = "Phone number cannot be blank")
-    @Size(max = 15, message = "Phone number cannot exceed 15 characters")
-    @Pattern(regexp = "^\\+?[0-9]{1,15}$", message = "Phone number must be valid")
+    @Column(nullable = false, unique = true, name = "phone_number", length = 15)
     private String phoneNumber;
 
     /**
@@ -114,9 +105,7 @@ public class User {
      */
     @Setter
     @Getter
-    @Column(nullable = false, unique = true, name = "hashed_password", columnDefinition = "VARCHAR(255)")
-    @NotBlank(message = "Password cannot be blank")
-    @Size(min = 8, max = 255, message = "Password must be between 8 and 255 characters")
+    @Column(nullable = false, unique = true, name = "hashed_password")
     private String hashedPassword;
 
     /**
@@ -127,7 +116,7 @@ public class User {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
 
     /**
@@ -138,7 +127,7 @@ public class User {
     @Getter
     @Setter
     @Builder.Default
-    @Column(nullable = false, name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(nullable = false, name = "is_active")
     private boolean isActive = true;
 
     /**
@@ -157,10 +146,8 @@ public class User {
      * application.
      */
     @Getter
-    @CreatedDate
+    @CreationTimestamp
     @Column(nullable = false, name = "created_at", updatable = false)
-    @PastOrPresent(message = "Created at must be in the past or present")
-    @NotNull(message = "Created at cannot be null")
     private Instant createdAt;
 
     /**
@@ -169,9 +156,8 @@ public class User {
      * application.
      */
     @Getter
-    @LastModifiedDate
-    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    @PastOrPresent(message = "Updated at must be in the past or present")
+    @UpdateTimestamp
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
 
     /**
@@ -180,7 +166,31 @@ public class User {
      */
     @Getter
     @Setter
-    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Company company;
 
+    @Getter
+    @Setter
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_warehouse_association",
+        joinColumns = @JoinColumn(name = "user_uuid"),
+        inverseJoinColumns = @JoinColumn(name = "warehouse_uuid")
+    )
+    private Set<Warehouse> warehouse;
+
+    @Getter
+    @Setter
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<InventoryTransaction> inventoryTransactions;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Product> createdProducts;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "updatedBy", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Product> updatedProducts;
 }

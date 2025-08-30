@@ -1,15 +1,14 @@
 package com.froilan.synectix.repository.user;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import com.froilan.synectix.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.froilan.synectix.model.User;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Repository interface for accessing and managing {@link User} entities.
@@ -25,7 +24,7 @@ import com.froilan.synectix.model.User;
  * annotations to facilitate expressive data retrieval.
  * </p>
  *
- * @author
+ * @author Froilan Aquino
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
@@ -108,4 +107,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return {@code true} if a user exists with the given email, otherwise {@code false}
      */
     boolean existsByEmail(String email);
+
 }

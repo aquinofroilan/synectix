@@ -51,3 +51,6 @@ out/
 src/main/resources/keys/*.pem
 src/main/resources/keys/*.key
 src/main/resources/keys/*.der
+
+# SQL:
+*.sql
