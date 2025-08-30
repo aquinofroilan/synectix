@@ -30,7 +30,7 @@ public class ProductCategoryManagementService {
     }
 
     @Transactional
-    public void createProductCategory(ProductCategoryCreateBody newProductCategoryBody, String companyUuid)
+    public Integer createProductCategory(ProductCategoryCreateBody newProductCategoryBody, String companyUuid)
             throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
         Company companyReference = entityManager.getReference(Company.class, companyUuid);
         ProductCategory productCategory = ProductCategory.builder()
@@ -39,15 +39,20 @@ public class ProductCategoryManagementService {
                 .description(newProductCategoryBody.getDescription())
                 .company(companyReference)
                 .build();
-        productCategoryRepository.save(productCategory);
+        return productCategoryRepository.save(productCategory).getProductCategoryId();
     }
 
     @Transactional
-    public void deleteProductCategory(Integer id) throws NotFoundException {
+    public boolean deleteProductCategory(Integer id, String companyUuid) throws NotFoundException {
         ProductCategory productCategory = productCategoryRepository.findById(id)
                 .orElseThrow(
                         () -> new EntityNotFoundException("ProductCategory not found with ID: " + id));
+        if (!productCategory.getCompany().getUuid().toString().equals(companyUuid)) {
+            // TODO: Create and throw a custom exception for unauthorized access
+            throw new NotFoundException("ProductCategory not found with ID: " + id);
+        }
         productCategoryRepository.delete(productCategory);
+        return true;
     }
 
     public List<ProductCategory>  getProductCategories(String companyUuid) {
