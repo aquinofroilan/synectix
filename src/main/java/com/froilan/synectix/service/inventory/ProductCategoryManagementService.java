@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -56,13 +57,24 @@ public class ProductCategoryManagementService {
     }
 
     public List<ProductCategory>  getProductCategories(String companyUuid) {
-        // This method can be implemented to retrieve all product categories associated with a company.
-        // For now, it is left empty as per the original code structure
         return productCategoryRepository.findAllByCompanyUuid(UUID.fromString(companyUuid));
     }
 
     public ProductCategory getProductCategory(Integer id) throws NotFoundException {
         return productCategoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("ProductCategory not found with ID: " + id));
+    }
+
+    public Integer updateProductCategory(Integer valueOf, ProductCategoryCreateBody request, String companyUuid) {
+        ProductCategory productCategory = productCategoryRepository.findById(valueOf)
+                .orElseThrow(() -> new NotFoundException("ProductCategory not found with ID: " + valueOf));
+        if (!productCategory.getCompany().getUuid().toString().equals(companyUuid)) {
+            // TODO: Create and throw a custom exception for unauthorized access
+            throw new NotFoundException("ProductCategory not found with ID: " + valueOf);
+        }
+        productCategory.setProductCategoryCode(request.getProductCategoryCode());
+        productCategory.setProductCategoryName(request.getProductCategoryName());
+        productCategory.setDescription(request.getDescription());
+        return productCategoryRepository.save(productCategory).getProductCategoryId();
     }
 }

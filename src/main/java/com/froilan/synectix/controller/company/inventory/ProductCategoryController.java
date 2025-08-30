@@ -51,9 +51,11 @@ public class ProductCategoryController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String updateProductCategory(@PathVariable String id, @Valid @RequestBody ProductCategoryCreateBody request) {
+    public ResponseEntity<Map<String, Object>> updateProductCategory(@PathVariable String id, @Valid @RequestBody ProductCategoryCreateBody request) {
         logger.info("Updating product category with ID: {}", id);
-        return "Product category updated successfully";
+        String companyUuid = jwtClaims.getCurrentCompanyUuid();
+        Integer productCategoryId = productCategoryManagementService.updateProductCategory(Integer.valueOf(id), request, companyUuid);
+        return ResponseEntity.ok().body(Map.of("status", "success", "productCategoryId", productCategoryId));
     }
 
     @DeleteMapping("/{id}")
