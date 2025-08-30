@@ -89,4 +89,10 @@ public class WarehouseManagementService {
                 .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
         warehouseRepository.delete(warehouse);
     }
+
+    @Transactional
+    public void updateWarehouse(String uuid, WarehouseCreateBody updatedWarehouse, String userUuid, String companyUuid)
+            throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
+
+    }
 }

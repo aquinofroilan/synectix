@@ -61,6 +61,7 @@ public class WarehouseController {
                 userUuid,
                 companyUuid,
                 uuid);
+        warehouseManagementService.updateWarehouse(uuid, warehouseCreateBody, userUuid, companyUuid);
         return ResponseEntity.ok().body(Map.of("status", "success", "message", "Warehouse updated successfully"));
     }
 
