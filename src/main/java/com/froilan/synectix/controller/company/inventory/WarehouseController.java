@@ -40,7 +40,7 @@ public class WarehouseController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public  ResponseEntity<Map<String, String>> createWarehouse(@Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
+    public ResponseEntity<Map<String, String>> createWarehouse(@Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
         String userUuid = jwtClaims.getCurrentUserId();
         String companyUuid = jwtClaims.getCurrentCompanyUuid();
         Warehouse result = warehouseManagementService.createWarehouse(warehouseCreateBody, userUuid, companyUuid);
@@ -53,28 +53,34 @@ public class WarehouseController {
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{uuid}")
-    public String updateWarehouse(@PathVariable("uuid") String uuid, @Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
-        logger.info("Updating an existing warehouse with UUID: {}", uuid);
-        // Logic to update an existing warehouse
-        return "Warehouse updated successfully";
+    public ResponseEntity<Map<String, String>> updateWarehouse(@PathVariable("uuid") String uuid,
+            @Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
+        String userUuid = jwtClaims.getCurrentUserId();
+        String companyUuid = jwtClaims.getCurrentCompanyUuid();
+        logger.info("Warehouse update request. endpoint=/api/company/inventory/warehouse, userUuid={}, companyUuid={}, warehouseUuid={}",
+                userUuid,
+                companyUuid,
+                uuid);
+        return ResponseEntity.ok().body(Map.of("status", "success", "message", "Warehouse updated successfully"));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{uuid}")
-    public String deleteWarehouse(@PathVariable("uuid") String uuid) {
-        logger.info("Deleting a warehouse with UUID: {}", uuid);
+    public ResponseEntity<Map<String, String>> deleteWarehouse(@PathVariable("uuid") String uuid) {
+        logger.info("Warehouse deletion request. endpoint=/api/company/inventory/warehouse, userUuid={}, companyUuid={}, warehouseUuid={}",
+                jwtClaims.getCurrentUserId(),
+                jwtClaims.getCurrentCompanyUuid(),
+                uuid);
         warehouseManagementService.deleteWarehouse(uuid);
-        return "Warehouse deleted successfully";
+        return ResponseEntity.ok().body(Map.of("status", "success", "message", "Warehouse deleted successfully"));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
     public ResponseEntity<Map<String, Object>> getWarehouse(@PathVariable("uuid") String uuid) {
-        String userUuid = jwtClaims.getCurrentUserId();
-        String companyUuid = jwtClaims.getCurrentCompanyUuid();
         logger.info("Warehouse retrieval request. endpoint=/api/company/inventory/warehouse, userUuid={}, companyUuid={}, warehouseUuid={}",
-                userUuid,
-                companyUuid,
+                jwtClaims.getCurrentUserId(),
+                jwtClaims.getCurrentCompanyUuid(),
                 uuid);
         WarehouseDetailsDTO warehouse = warehouseManagementService.getWarehouse(uuid);
         return ResponseEntity.ok().body(Map.of("status", "success", "warehouse", warehouse));

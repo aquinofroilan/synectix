@@ -56,37 +56,37 @@ public class WarehouseManagementService {
         return warehouseRepository.save(warehouse);
     }
 
+    public WarehouseDetailsDTO getWarehouse(String uuid) throws EntityNotFoundException {
+        Warehouse warehouse = warehouseRepository.findByWarehouseUuidWithRelations(UUID.fromString(uuid))
+                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
+        return WarehouseDetailsDTO.builder()
+                .warehouseUuid(warehouse.getWarehouseUuid())
+                .warehouseName(warehouse.getWarehouseName())
+                .warehouseCode(warehouse.getWarehouseCode())
+                .addressLine1(warehouse.getAddressLine1())
+                .addressLine2(warehouse.getAddressLine2())
+                .city(warehouse.getCity())
+                .stateProvince(warehouse.getStateProvince())
+                .postalCode(warehouse.getPostalCode())
+                .warehouseType(warehouse.getWarehouseType())
+                .capacityLimit(warehouse.getCapacityLimit())
+                .capacityUnit(warehouse.getCapacityUnit())
+                .isActive(warehouse.isActive())
+                .companyUuid(warehouse.getCompany().getUuid())
+                .companyName(warehouse.getCompany().getName())
+                .countryId(warehouse.getCountry().getId())
+                .countryName(warehouse.getCountry().getName())
+                .createdByUserUuid(warehouse.getCreatedBy().getUserUuid())
+                .createdByUsername(warehouse.getCreatedBy().getUsername())
+                .updatedByUserUuid(warehouse.getUpdatedBy().getUserUuid())
+                .updatedByUsername(warehouse.getUpdatedBy().getUsername())
+                .build();
+    }
+
     @Transactional
     public void deleteWarehouse(String uuid) throws EntityNotFoundException {
         Warehouse warehouse = warehouseRepository.findByWarehouseUuid(UUID.fromString(uuid))
                 .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
         warehouseRepository.delete(warehouse);
-    }
-
-    public WarehouseDetailsDTO getWarehouse(String uuid) throws EntityNotFoundException {
-        Warehouse warehouse = warehouseRepository.findByWarehouseUuidWithRelations(UUID.fromString(uuid))
-                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
-            return WarehouseDetailsDTO.builder()
-        .warehouseUuid(warehouse.getWarehouseUuid())
-        .warehouseName(warehouse.getWarehouseName())
-        .warehouseCode(warehouse.getWarehouseCode())
-        .addressLine1(warehouse.getAddressLine1())
-        .addressLine2(warehouse.getAddressLine2())
-        .city(warehouse.getCity())
-        .stateProvince(warehouse.getStateProvince())
-        .postalCode(warehouse.getPostalCode())
-        .warehouseType(warehouse.getWarehouseType())
-        .capacityLimit(warehouse.getCapacityLimit())
-        .capacityUnit(warehouse.getCapacityUnit())
-        .isActive(warehouse.isActive())
-        .companyUuid(warehouse.getCompany().getUuid())
-        .companyName(warehouse.getCompany().getName())
-        .countryId(warehouse.getCountry().getId())
-        .countryName(warehouse.getCountry().getName())
-        .createdByUserUuid(warehouse.getCreatedBy().getUserUuid())
-                    .createdByUsername(warehouse.getCreatedBy().getUsername())
-                    .updatedByUserUuid(warehouse.getUpdatedBy().getUserUuid())
-                    .updatedByUsername(warehouse.getUpdatedBy().getUsername())
-        .build();
     }
 }
