@@ -7,11 +7,13 @@ import com.froilan.synectix.service.inventory.WarehouseManagementService;
 
 import jakarta.validation.Valid;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,15 +37,17 @@ public class WarehouseController {
         this.jwtClaims = jwtClaims;
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public  Warehouse createWarehouse(@Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
-        logger.info("Creating a new warehouse");
-        String userUuid = jwtClaims.getCurrentUserUuid();
-        String username = jwtClaims.getCurrentUsername();
+    public  ResponseEntity<Map<String, String>> createWarehouse(@Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
+        String userUuid = jwtClaims.getCurrentUserId();
         String companyUuid = jwtClaims.getCurrentCompanyUuid();
-        logger.info("User {} (ID: {}) from company {} is creating a warehouse", username, userUuid, companyUuid);
-        return warehouseManagementService.createWarehouse(warehouseCreateBody, userUuid, companyUuid);
+        Warehouse result = warehouseManagementService.createWarehouse(warehouseCreateBody, userUuid, companyUuid);
+        logger.info("Warehouse creation request. endpoint=/api/company/inventory/warehouse, userUuid={}, companyUuid={}, resultWarehouseUuid={}",
+                userUuid,
+                companyUuid,
+                result.getWarehouseUuid());
+        return ResponseEntity.ok().body(Map.of("status", "success", "warehouseUuid", result.getWarehouseUuid().toString()));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -65,8 +69,12 @@ public class WarehouseController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
     public String getWarehouse(@PathVariable("uuid") String uuid) {
-        logger.info("Retrieving warehouse details for UUID: {}", uuid);
-        // Logic to retrieve warehouse details
+        String userUuid = jwtClaims.getCurrentUserId();
+        String companyUuid = jwtClaims.getCurrentCompanyUuid();
+        logger.info("Warehouse retrieval request. endpoint=/api/company/inventory/warehouse, userUuid={}, companyUuid={}, warehouseUuid={}",
+                userUuid,
+                companyUuid,
+                uuid);
         return "Warehouse details retrieved successfully";
     }
 

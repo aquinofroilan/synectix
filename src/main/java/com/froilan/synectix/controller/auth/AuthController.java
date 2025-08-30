@@ -36,7 +36,7 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/signin")
-    public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody SignInRequest request) {
+    public ResponseEntity<Map<String, Boolean>> signIn(@Valid @RequestBody SignInRequest request) {
         logger.info("{} - Sign in request for user: {}", LocalDateTime.now(), request.getUser());
         Map<String, String> tokens = this.authenticationService.signInUser(request.getUser(), request.getPassword());
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", tokens.get("refreshToken"))
@@ -46,9 +46,17 @@ public class AuthController {
                 .path("/api/auth/refresh")
                 .maxAge(Duration.ofDays(30))
                 .build();
+        ResponseCookie accessTokenCookie = ResponseCookie.from("Authorization", tokens.get("accessToken"))
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(Duration.ofMinutes(15))
+                .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                .body(Map.of("access_token", tokens.get("accessToken")));
+                .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+                .body(Map.of("login_success", true));
     }
 
     @ResponseStatus(HttpStatus.OK)

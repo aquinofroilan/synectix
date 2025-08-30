@@ -5,6 +5,7 @@ import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.inventory.WarehouseCreateBody;
 import com.froilan.synectix.model.inventory.Warehouse;
+import com.froilan.synectix.model.lookup.Country;
 import com.froilan.synectix.repository.company.inventory.WarehouseRepository;
 
 import jakarta.persistence.EntityManager;
@@ -29,8 +30,9 @@ public class WarehouseManagementService {
 
     @Transactional
     public Warehouse createWarehouse(WarehouseCreateBody newWarehouse, String userUuid, String companyUuid) throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
-        User creatorReference = entityManager.getReference(User.class, userUuid);
-        Company companyReference = entityManager.getReference(Company.class, companyUuid);
+        User creatorReference = entityManager.getReference(User.class, UUID.fromString(userUuid));
+        Company companyReference = entityManager.getReference(Company.class, UUID.fromString(companyUuid));
+        Country countryReference = entityManager.getReference(Country.class, newWarehouse.getCountryId());
         Warehouse warehouse = Warehouse.builder()
                 .warehouseName(newWarehouse.getWarehouseName())
                 .addressLine1(newWarehouse.getAddressLine1())
@@ -39,9 +41,12 @@ public class WarehouseManagementService {
                 .stateProvince(newWarehouse.getStateProvince())
                 .postalCode(newWarehouse.getPostalCode())
                 .warehouseType(newWarehouse.getWarehouseType())
+                .warehouseCode(newWarehouse.getWarehouseCode())
+                .description(newWarehouse.getDescription())
                 .capacityLimit(newWarehouse.getCapacityLimit())
                 .capacityUnit(newWarehouse.getCapacityUnit())
                 .isActive(newWarehouse.isActive())
+                .country(countryReference)
                 .company(companyReference)
                 .createdBy(creatorReference)
                 .updatedBy(creatorReference)

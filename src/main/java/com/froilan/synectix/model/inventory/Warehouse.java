@@ -2,7 +2,7 @@ package com.froilan.synectix.model.inventory;
 
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
-import com.froilan.synectix.model.enums.product.CapacityUnit;
+import com.froilan.synectix.model.enums.product.WarehouseCapacityUnit;
 import com.froilan.synectix.model.enums.product.WarehouseType;
 import com.froilan.synectix.model.lookup.Country;
 import jakarta.persistence.CascadeType;
@@ -31,6 +31,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Builder
 @Entity()
@@ -175,7 +178,7 @@ public class Warehouse {
     @Setter
     @Column(nullable = false, name = "capacity_unit", length = 50)
     @Enumerated(EnumType.ORDINAL)
-    private CapacityUnit capacityUnit;
+    private WarehouseCapacityUnit capacityUnit;
 
     /**
      * Timestamp when the warehouse was created.
@@ -183,6 +186,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
+    @CreationTimestamp
     @Column(nullable = false, name = "created_at")
     private Instant createdAt;
 
@@ -192,6 +196,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
+    @UpdateTimestamp
     @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
 

@@ -1,9 +1,9 @@
 package com.froilan.synectix.model.dto.request.inventory;
 
-import com.froilan.synectix.model.enums.product.CapacityUnit;
+import com.froilan.synectix.model.enums.product.WarehouseCapacityUnit;
 import com.froilan.synectix.model.enums.product.WarehouseType;
 import jakarta.validation.constraints.NotBlank;
-
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +23,8 @@ public class WarehouseCreateBody {
     @NotBlank(message = "Warehouse code cannot be blank")
     private String warehouseCode;
 
+    private String description;
+
     @NotBlank(message = "Location cannot be blank")
     private String location;
 
@@ -41,18 +43,18 @@ public class WarehouseCreateBody {
     @NotBlank(message = "Postal Code cannot be blank")
     private String postalCode;
 
-    @NotBlank(message = "Warehouse type cannot be blank")
-    private WarehouseType  warehouseType;
+    @NotNull(message = "Country ID cannot be blank")
+    private Integer countryId;
 
-    @NotBlank(message = "Capacity limit cannot be blank")
+    @NotNull(message = "Warehouse type cannot be blank")
+    private WarehouseType warehouseType;
+
+    @NotNull(message = "Capacity limit cannot be blank")
     private BigDecimal capacityLimit;
 
-    @NotBlank(message = "Capacity unit cannot be blank")
-    private CapacityUnit capacityUnit;
+    @NotNull(message = "Capacity unit cannot be blank")
+    private WarehouseCapacityUnit capacityUnit;
 
     @Builder.Default
     private boolean isActive = true;
-
-    private String createdBy;
-    private String updatedBy;
 }
