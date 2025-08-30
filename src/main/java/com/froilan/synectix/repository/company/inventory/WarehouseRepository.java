@@ -3,6 +3,8 @@ package com.froilan.synectix.repository.company.inventory;
 
 import com.froilan.synectix.model.inventory.Warehouse;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -26,5 +28,13 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, UUID> {
      * @return true if a warehouse with the given UUID exists, false otherwise
      */
     boolean existsByWarehouseUuid(UUID warehouseUuid);
+
+    @Query("SELECT w FROM Warehouse w " +
+        "JOIN FETCH w.company " +
+        "JOIN FETCH w.country " +
+        "LEFT JOIN FETCH w.createdBy " +
+        "LEFT JOIN FETCH w.updatedBy " +
+        "WHERE w.warehouseUuid = :uuid")
+    Optional<Warehouse> findByWarehouseUuidWithRelations(@Param("uuid") UUID uuid);
 
 }

@@ -2,6 +2,7 @@ package com.froilan.synectix.controller.company.inventory;
 
 import com.froilan.synectix.config.security.jwt.JWTClaims;
 import com.froilan.synectix.model.dto.request.inventory.WarehouseCreateBody;
+import com.froilan.synectix.model.dto.response.warehouse.WarehouseDetailsDTO;
 import com.froilan.synectix.model.inventory.Warehouse;
 import com.froilan.synectix.service.inventory.WarehouseManagementService;
 
@@ -68,14 +69,15 @@ public class WarehouseController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
-    public String getWarehouse(@PathVariable("uuid") String uuid) {
+    public ResponseEntity<Map<String, Object>> getWarehouse(@PathVariable("uuid") String uuid) {
         String userUuid = jwtClaims.getCurrentUserId();
         String companyUuid = jwtClaims.getCurrentCompanyUuid();
         logger.info("Warehouse retrieval request. endpoint=/api/company/inventory/warehouse, userUuid={}, companyUuid={}, warehouseUuid={}",
                 userUuid,
                 companyUuid,
                 uuid);
-        return "Warehouse details retrieved successfully";
+        WarehouseDetailsDTO warehouse = warehouseManagementService.getWarehouse(uuid);
+        return ResponseEntity.ok().body(Map.of("status", "success", "warehouse", warehouse));
     }
 
 }
