@@ -3,6 +3,7 @@ package com.froilan.synectix.service.inventory;
 import com.froilan.synectix.exception.validation.NotFoundException;
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.dto.request.inventory.ProductCategoryCreateBody;
+import com.froilan.synectix.model.dto.response.product.category.ProductCategoryDTO;
 import com.froilan.synectix.model.inventory.ProductCategory;
 
 import jakarta.persistence.EntityManager;
@@ -10,7 +11,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -56,13 +56,26 @@ public class ProductCategoryManagementService {
         return true;
     }
 
-    public List<ProductCategory>  getProductCategories(String companyUuid) {
-        return productCategoryRepository.findAllByCompanyUuid(UUID.fromString(companyUuid));
+    public List<ProductCategoryDTO> getProductCategories(String companyUuid) {
+        return productCategoryRepository.findAllByCompanyUuid(UUID.fromString(companyUuid)).stream()
+                .map(productCategory -> ProductCategoryDTO.builder()
+                        .productCategoryId(productCategory.getProductCategoryId())
+                        .productCategoryCode(productCategory.getProductCategoryCode())
+                        .productCategoryName(productCategory.getProductCategoryName())
+                        .description(productCategory.getDescription())
+                        .build())
+                .toList();
     }
 
-    public ProductCategory getProductCategory(Integer id) throws NotFoundException {
-        return productCategoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("ProductCategory not found with ID: " + id));
+    public ProductCategoryDTO getProductCategory(Integer id) throws NotFoundException {
+        ProductCategory productCategory = productCategoryRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("ProductCategory not found with ID: " + id));
+        return ProductCategoryDTO.builder()
+                .productCategoryId(productCategory.getProductCategoryId())
+                .productCategoryCode(productCategory.getProductCategoryCode())
+                .productCategoryName(productCategory.getProductCategoryName())
+                .description(productCategory.getDescription())
+                .build();
     }
 
     public Integer updateProductCategory(Integer valueOf, ProductCategoryCreateBody request, String companyUuid) {

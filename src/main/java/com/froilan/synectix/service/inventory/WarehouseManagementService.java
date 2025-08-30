@@ -92,10 +92,10 @@ public class WarehouseManagementService {
     }
 
     @Transactional
-    public void updateWarehouse(String uuid, WarehouseCreateBody updatedWarehouse, String userUuid, String companyUuid, String warehouseUuid)
+    public void updateWarehouse(WarehouseCreateBody updatedWarehouse, String userUuid, String companyUuid, String warehouseUuid)
             throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
-        Warehouse existingWarehouse = warehouseRepository.findByWarehouseUuid(UUID.fromString(uuid))
-                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
+        Warehouse existingWarehouse = warehouseRepository.findByWarehouseUuid(UUID.fromString(warehouseUuid))
+                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + warehouseUuid));
         if (!existingWarehouse.getCompany().getUuid().toString().equals(companyUuid)
                 || !existingWarehouse.getWarehouseUuid().toString().equals(warehouseUuid)) {
             // TODO: Create custom exception

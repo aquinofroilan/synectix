@@ -1,6 +1,5 @@
 package com.froilan.synectix.controller.company.inventory;
 
-import com.froilan.synectix.model.inventory.ProductCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.froilan.synectix.config.security.jwt.JWTClaims;
 import com.froilan.synectix.model.dto.request.inventory.ProductCategoryCreateBody;
+import com.froilan.synectix.model.dto.response.product.category.ProductCategoryDTO;
 import com.froilan.synectix.service.inventory.ProductCategoryManagementService;
 
 import jakarta.validation.Valid;
@@ -74,7 +74,7 @@ public class ProductCategoryController {
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<Map<String, Object>> listProductCategories() {
         String companyUuid = jwtClaims.getCurrentCompanyUuid();
-        List<ProductCategory> productCategories = productCategoryManagementService.getProductCategories(companyUuid);
+        List<ProductCategoryDTO> productCategories = productCategoryManagementService.getProductCategories(companyUuid);
         logger.info("Listing product categories for company UUID. endpoint=/api/company/inventory/product-categories, companyUuid={}, total={}",
                 companyUuid,
                 productCategories.size());
@@ -84,7 +84,7 @@ public class ProductCategoryController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<Map<String, Object>> getProductCategoryById(@PathVariable String id) {
-        ProductCategory productCategory = productCategoryManagementService.getProductCategory(Integer.valueOf(id));
+        ProductCategoryDTO productCategory = productCategoryManagementService.getProductCategory(Integer.valueOf(id));
         logger.info("Retrieved product category with ID. endpoint=/api/company/inventory/product-categories/{}, productCategoryId={}",
                 id,
                 productCategory.getProductCategoryId());
