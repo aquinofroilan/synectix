@@ -4,6 +4,7 @@ import com.froilan.synectix.exception.validation.NotFoundException;
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.inventory.ProductCreateBody;
+import com.froilan.synectix.model.dto.response.product.ProductDetailsDTO;
 import com.froilan.synectix.model.inventory.Product;
 import com.froilan.synectix.model.inventory.ProductCategory;
 import com.froilan.synectix.repository.company.inventory.ProductRepository;
@@ -67,9 +68,41 @@ public class ProductService {
         return productRepository.save(product).getProductUuid().toString();
     }
 
-    public Product getProduct(UUID productUuid) throws NotFoundException {
-       return productRepository.findById(productUuid)
-                .orElseThrow(() -> new NotFoundException("Product not found with UUID: " + productUuid));
+    public ProductDetailsDTO getProduct(String productUuid) throws NotFoundException {
+       Product product = productRepository.findById(UUID.fromString(productUuid))
+               .orElseThrow(() -> new NotFoundException("Product not found with UUID: " + productUuid));
+        return ProductDetailsDTO.builder()
+        .productUuid(product.getProductUuid().toString())
+                .productCategory(product.getProductCategory().toString())
+                .sku(product.getSku())
+                .productName(product.getProductName())
+                .productDescription(product.getProductDescription())
+                .brand(product.getBrand())
+                .model(product.getModel())
+                .productType(product.getProductType().toString())
+                .unitMeasure(product.getUnitMeasure().toString())
+                .baseCost(product.getBaseCost())
+                .sellingPrice(product.getSellingPrice())
+                .weight(product.getWeight())
+                .weightUnit(product.getWeightUnit().toString())
+                .dimensionsLength(product.getDimensionsLength())
+                .dimensionsWidth(product.getDimensionsWidth())
+                .dimensionsHeight(product.getDimensionsHeight())
+                .dimensionUnit(product.getDimensionUnit().toString())
+                .barcode(product.getBarcode())
+                .qrCode(product.getQrCode())
+                .minimumStockLevel(product.getMinimumStockLevel())
+                .reorderPoint(product.getReorderPoint())
+                .reorderQuantity(product.getReorderQuantity())
+                .isActive(product.getIsActive())
+                .isSerialized(product.getIsSerialized())
+                .isLotTracked(product.getIsLotTracked())
+                .expirationTracking(product.getExpirationTracking())
+                .createdByUuid(product.getCreatedBy().getUserUuid().toString())
+                .updatedByUuid(product.getUpdatedBy().getUserUuid().toString())
+                .createdAt(product.getCreatedAt())
+                .updatedAt(product.getUpdatedAt())
+                .build();
     }
 
     public void deleteProduct(UUID productUuid) {

@@ -187,8 +187,6 @@ public class Product {
      * The height of the product.
      * This variable is used to store the height dimension of the product.
      */
-
-
     @Getter
     @Setter
     @Builder.Default

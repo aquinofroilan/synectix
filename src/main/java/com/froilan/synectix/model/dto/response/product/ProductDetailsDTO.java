@@ -3,12 +3,6 @@ package com.froilan.synectix.model.dto.response.product;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-import com.froilan.synectix.model.enums.product.DimensionUnit;
-import com.froilan.synectix.model.enums.product.ProductType;
-import com.froilan.synectix.model.enums.product.UnitMeasure;
-import com.froilan.synectix.model.enums.product.WeightUnit;
-import com.froilan.synectix.model.inventory.ProductCategory;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,22 +10,22 @@ import lombok.Data;
 @Data
 public class ProductDetailsDTO {
     private String productUuid;
-    private ProductCategory productCategory;
+    private String productCategory;
     private String sku;
     private String productName;
     private String productDescription;
     private String brand;
     private String model;
-    private ProductType productType;
-    private UnitMeasure unitMeasure;
+    private String productType;
+    private String unitMeasure;
     private BigDecimal baseCost;
     private BigDecimal sellingPrice;
     private BigDecimal weight;
-    private WeightUnit weightUnit;
+    private String weightUnit;
     private BigDecimal dimensionsLength;
     private BigDecimal dimensionsWidth;
     private BigDecimal dimensionsHeight;
-    private DimensionUnit dimensionUnit;
+    private String dimensionUnit;
     private String barcode;
     private String qrCode;
     private BigDecimal minimumStockLevel;

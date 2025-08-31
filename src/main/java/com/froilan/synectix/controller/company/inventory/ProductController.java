@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.froilan.synectix.config.security.jwt.JWTClaims;
 import com.froilan.synectix.model.dto.request.inventory.ProductCreateBody;
+import com.froilan.synectix.model.dto.response.product.ProductDetailsDTO;
 import com.froilan.synectix.service.inventory.ProductService;
 
 import jakarta.validation.Valid;
@@ -68,10 +69,15 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
-    public String getProduct(@PathVariable(name = "uuid") String uuid) {
-        logger.info("Retrieving product details for UUID: {}", uuid);
-        // Logic to retrieve product details
-        return "Product details retrieved successfully";
+    public ResponseEntity<Map<String, Object>> getProduct(@PathVariable(name = "uuid") String uuid) {
+        String userUuid = jwtClaims.getCurrentUserId();
+        String companyUuid = jwtClaims.getCurrentCompanyUuid();
+        ProductDetailsDTO productDetails = this.productService.getProduct(uuid);
+        logger.info("Product details retrieved successfully. endpoint=/api/company/inventory/product, userUuid={}, companyUuid={}, resultProductUuid={}",
+                userUuid,
+                companyUuid,
+                productDetails.getProductUuid());
+        return ResponseEntity.ok().body(Map.of("status", "success", "data", productDetails));
     }
 
 }
