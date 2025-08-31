@@ -4,7 +4,6 @@ import com.froilan.synectix.exception.validation.NotFoundException;
 import com.froilan.synectix.model.Company;
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.inventory.WarehouseCreateBody;
-import com.froilan.synectix.model.dto.response.warehouse.WarehouseDetails;
 import com.froilan.synectix.model.dto.response.warehouse.WarehouseDetailsDTO;
 import com.froilan.synectix.model.inventory.Warehouse;
 import com.froilan.synectix.model.lookup.Country;
