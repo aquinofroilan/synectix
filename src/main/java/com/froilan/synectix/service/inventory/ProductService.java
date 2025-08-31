@@ -105,11 +105,19 @@ public class ProductService {
                 .build();
     }
 
-    public void deleteProduct(UUID productUuid) {
-        productRepository.deleteById(productUuid);
+    @Transactional
+    public boolean deleteProduct(UUID productUuid) {
+        Product product = productRepository.findById(productUuid)
+                .orElseThrow(() -> new NotFoundException("Product not found with UUID: " + productUuid));
+        productRepository.delete(product);
+        return true;
     }
 
-    public void deleteProducts(UUID[] productUuids) {
-        productRepository.deleteAllById(List.of(productUuids));
+    @Transactional
+    public boolean deleteProducts(UUID[] productUuids) {
+        List<Product> products = productRepository.findAllById(List.of(productUuids));
+        if (products.size() != productUuids.length) throw new NotFoundException("One or more products not found for the provided UUIDs");
+        productRepository.deleteAll(products);
+        return true;
     }
 }
