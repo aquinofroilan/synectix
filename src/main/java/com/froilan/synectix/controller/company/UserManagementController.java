@@ -12,7 +12,17 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.froilan.synectix.model.User;
 import com.froilan.synectix.model.dto.request.company.NewCompanyUserRequest;
@@ -29,7 +39,7 @@ public class UserManagementController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createUser(@NotNull @Valid @RequestBody NewCompanyUserRequest request) {
         logger.info("{} - User creation request for: {}", LocalDateTime.now(), request.getUsername());
         userManagementService.createUser(request);
@@ -37,7 +47,7 @@ public class UserManagementController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<?> updateUser(@Valid @RequestBody NewCompanyUserRequest request) {
         logger.info("{} - User update request for: {}", LocalDateTime.now(), request.getUsername());
         // TODO: Logic to update a user
@@ -46,7 +56,7 @@ public class UserManagementController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/delete/{uuid}")
+    @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> deleteUser(@PathVariable("uuid") String uuid) {
         if (uuid == null || uuid.isEmpty()) {
             logger.error("{} - Invalid UUID provided for deletion", LocalDateTime.now());
@@ -58,13 +68,14 @@ public class UserManagementController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/list")
+    @GetMapping("/all")
     public ResponseEntity<Optional<User>> listUsers() {
         logger.info("{} - User listing request", LocalDateTime.now());
         Optional<User> users = userManagementService.getAllCompanyUsers();
         return ResponseEntity.ok(users);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
     public ResponseEntity<List<User>> searchUsers(@RequestParam("searchTerm") String searchTerm) {
         logger.info("{} - User search request for term: '{}'", LocalDateTime.now(), searchTerm);

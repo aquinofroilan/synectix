@@ -1,9 +1,10 @@
 package com.froilan.synectix.controller.auth;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Map;
-
+import com.froilan.synectix.config.security.jwt.JWTUtil;
+import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
+import com.froilan.synectix.model.dto.request.authentication.SignInRequest;
+import com.froilan.synectix.service.auth.AuthenticationService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -17,12 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.froilan.synectix.config.security.jwt.JWTUtil;
-import com.froilan.synectix.model.dto.request.authentication.NewClientSignUpRequest;
-import com.froilan.synectix.model.dto.request.authentication.SignInRequest;
-import com.froilan.synectix.service.auth.AuthenticationService;
-
-import jakarta.validation.Valid;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -38,7 +36,7 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/signin")
-    public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody SignInRequest request) {
+    public ResponseEntity<Map<String, Boolean>> signIn(@Valid @RequestBody SignInRequest request) {
         logger.info("{} - Sign in request for user: {}", LocalDateTime.now(), request.getUser());
         Map<String, String> tokens = this.authenticationService.signInUser(request.getUser(), request.getPassword());
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", tokens.get("refreshToken"))
@@ -48,9 +46,17 @@ public class AuthController {
                 .path("/api/auth/refresh")
                 .maxAge(Duration.ofDays(30))
                 .build();
+        ResponseCookie accessTokenCookie = ResponseCookie.from("Authorization", tokens.get("accessToken"))
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(Duration.ofMinutes(15))
+                .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                .body(Map.of("access_token", tokens.get("accessToken")));
+                .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+                .body(Map.of("login_success", true));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -61,7 +67,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
         }
         String newAccessToken = jwtUtil.refreshToken(jwtUtil.getUsernameFromToken(refreshToken),
-                jwtUtil.getUuidFromToken(refreshToken));
+                jwtUtil.getUuidFromToken(refreshToken), jwtUtil.getCompanyUuidFromToken(refreshToken));
         return ResponseEntity.ok(Map.of("access_token", newAccessToken));
     }
 
