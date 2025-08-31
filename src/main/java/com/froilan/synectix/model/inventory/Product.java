@@ -33,7 +33,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-@Entity
+@Entity()
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,6 +47,7 @@ public class Product {
     private UUID productUuid;
 
     @Getter
+    @Setter
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_company_uuid", nullable = false)
     private Company company;

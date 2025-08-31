@@ -38,8 +38,13 @@ public class ProductController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping
     public String createProduct(@Valid @RequestBody ProductCreateBody productCreateBody) {
-        logger.info("Creating a new product");
-        this.productService.createProduct(productCreateBody);
+        String userUuid = jwtClaims.getCurrentUserId();
+        String companyUuid = jwtClaims.getCurrentCompanyUuid();
+        String productUuid = this.productService.createProduct(productCreateBody, userUuid, companyUuid);
+        logger.info("Product creation request. endpoint=/api/company/inventory/product, userUuid={}, companyUuid={}, resultProductUuid={}",
+                userUuid,
+                companyUuid,
+                productUuid);
         return "Product created successfully";
     }
 
