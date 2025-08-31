@@ -149,7 +149,7 @@ public class Warehouse {
     @Getter
     @Setter
     @Column(nullable = false, name = "warehouse_type", length = 50)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private WarehouseType warehouseType;
 
     /**
@@ -177,7 +177,7 @@ public class Warehouse {
     @Getter
     @Setter
     @Column(nullable = false, name = "capacity_unit", length = 50)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private WarehouseCapacityUnit capacityUnit;
 
     /**

@@ -3,7 +3,6 @@ package com.froilan.synectix.controller.company.inventory;
 import com.froilan.synectix.config.security.jwt.JWTClaims;
 import com.froilan.synectix.model.dto.request.inventory.WarehouseCreateBody;
 import com.froilan.synectix.model.dto.response.warehouse.WarehouseDetailsDTO;
-import com.froilan.synectix.model.inventory.Warehouse;
 import com.froilan.synectix.service.inventory.WarehouseManagementService;
 
 import jakarta.validation.Valid;
@@ -43,12 +42,12 @@ public class WarehouseController {
     public ResponseEntity<Map<String, String>> createWarehouse(@Valid @RequestBody WarehouseCreateBody warehouseCreateBody) {
         String userUuid = jwtClaims.getCurrentUserId();
         String companyUuid = jwtClaims.getCurrentCompanyUuid();
-        Warehouse result = warehouseManagementService.createWarehouse(warehouseCreateBody, userUuid, companyUuid);
+        String warehouseUuid = warehouseManagementService.createWarehouse(warehouseCreateBody, userUuid, companyUuid);
         logger.info("Warehouse creation request. endpoint=/api/company/inventory/warehouse, userUuid={}, companyUuid={}, resultWarehouseUuid={}",
                 userUuid,
                 companyUuid,
-                result.getWarehouseUuid());
-        return ResponseEntity.ok().body(Map.of("status", "success", "warehouseUuid", result.getWarehouseUuid().toString()));
+                warehouseUuid);
+        return ResponseEntity.ok().body(Map.of("status", "success", "warehouseUuid", warehouseUuid));
     }
 
     @ResponseStatus(HttpStatus.OK)

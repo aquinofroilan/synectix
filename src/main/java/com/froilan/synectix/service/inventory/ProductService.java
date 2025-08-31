@@ -68,7 +68,7 @@ public class ProductService {
     }
 
     public Product getProduct(UUID productUuid) throws NotFoundException {
-       return  productRepository.findById(productUuid)
+       return productRepository.findById(productUuid)
                 .orElseThrow(() -> new NotFoundException("Product not found with UUID: " + productUuid));
     }
 

@@ -1,10 +1,12 @@
 package com.froilan.synectix.controller.company.inventory;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +39,7 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping
-    public String createProduct(@Valid @RequestBody ProductCreateBody productCreateBody) {
+    public ResponseEntity<Map<String, String>> createProduct(@Valid @RequestBody ProductCreateBody productCreateBody) {
         String userUuid = jwtClaims.getCurrentUserId();
         String companyUuid = jwtClaims.getCurrentCompanyUuid();
         String productUuid = this.productService.createProduct(productCreateBody, userUuid, companyUuid);
@@ -45,7 +47,7 @@ public class ProductController {
                 userUuid,
                 companyUuid,
                 productUuid);
-        return "Product created successfully";
+        return ResponseEntity.ok().body(Map.of("status", "success", "productUuid", productUuid));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -66,7 +68,7 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
-    public String getProduct(@PathVariable("uuid") String uuid) {
+    public String getProduct(@PathVariable(name = "uuid") String uuid) {
         logger.info("Retrieving product details for UUID: {}", uuid);
         // Logic to retrieve product details
         return "Product details retrieved successfully";

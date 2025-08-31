@@ -31,7 +31,7 @@ public class WarehouseManagementService {
     }
 
     @Transactional
-    public Warehouse createWarehouse(WarehouseCreateBody newWarehouse, String userUuid, String companyUuid)
+    public String createWarehouse(WarehouseCreateBody newWarehouse, String userUuid, String companyUuid)
             throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
         User creatorReference = entityManager.getReference(User.class, UUID.fromString(userUuid));
         Company companyReference = entityManager.getReference(Company.class, UUID.fromString(companyUuid));
@@ -54,7 +54,7 @@ public class WarehouseManagementService {
                 .createdBy(creatorReference)
                 .updatedBy(creatorReference)
                 .build();
-        return warehouseRepository.save(warehouse);
+        return warehouseRepository.save(warehouse).getWarehouseUuid().toString();
     }
 
     public WarehouseDetailsDTO getWarehouse(String uuid) throws EntityNotFoundException {
