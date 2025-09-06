@@ -26,14 +26,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Builder
 @Entity()
@@ -148,7 +147,7 @@ public class Warehouse {
      */
     @Getter
     @Setter
-    @Column(nullable = false, name = "warehouse_type", length = 50)
+    @Column(nullable = false, name = "warehouse_type")
     @Enumerated(EnumType.STRING)
     private WarehouseType warehouseType;
 
