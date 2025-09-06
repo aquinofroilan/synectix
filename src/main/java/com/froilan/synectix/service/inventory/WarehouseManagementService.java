@@ -24,6 +24,7 @@ public class WarehouseManagementService {
     @PersistenceContext
     private EntityManager entityManager;
     private final WarehouseRepository warehouseRepository;
+    private static final String NOT_FOUND_MESSAGE = "Warehouse not found with UUID: ";
 
     public WarehouseManagementService(WarehouseRepository warehouseRepository) {
         this.warehouseRepository = warehouseRepository;
@@ -58,7 +59,7 @@ public class WarehouseManagementService {
 
     public WarehouseDetailsDTO getWarehouse(String uuid) throws EntityNotFoundException {
         Warehouse warehouse = warehouseRepository.findByWarehouseUuidWithRelations(UUID.fromString(uuid))
-                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE + uuid));
         return WarehouseDetailsDTO.builder()
                 .warehouseUuid(warehouse.getWarehouseUuid())
                 .warehouseName(warehouse.getWarehouseName())
@@ -86,7 +87,7 @@ public class WarehouseManagementService {
     @Transactional
     public void deleteWarehouse(String uuid) throws EntityNotFoundException {
         Warehouse warehouse = warehouseRepository.findByWarehouseUuid(UUID.fromString(uuid))
-                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + uuid));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE + uuid));
         warehouseRepository.delete(warehouse);
     }
 
@@ -94,7 +95,7 @@ public class WarehouseManagementService {
     public void updateWarehouse(WarehouseCreateBody updatedWarehouse, String userUuid, String companyUuid, String warehouseUuid)
             throws EntityNotFoundException, IllegalArgumentException, OptimisticLockingFailureException {
         Warehouse existingWarehouse = warehouseRepository.findByWarehouseUuid(UUID.fromString(warehouseUuid))
-                .orElseThrow(() -> new NotFoundException("Warehouse not found with UUID: " + warehouseUuid));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE + warehouseUuid));
         if (!existingWarehouse.getCompany().getUuid().toString().equals(companyUuid)
                 || !existingWarehouse.getWarehouseUuid().toString().equals(warehouseUuid)) {
             // TODO: Create custom exception
